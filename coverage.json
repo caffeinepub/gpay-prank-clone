@@ -1,0 +1,104 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-25T20:52:31.833Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 6,
+    "implemented": 6,
+    "items": [
+      {
+        "id": "REQ-30",
+        "summary": "Add a small vertical spacing gap (e.g. mb-4 or mt-4, ~16px) between the GPay multicolor logo and the quick action icons grid on the home screen (HomePage.tsx), so the two elements are visually separated.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/HomePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/HomePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-31",
+        "summary": "In PaymentEntryPage.tsx, after the user fills in recipient details and taps the Pay/Send button (and correct PIN is entered), display a bank selection bottom sheet before navigating to the payment success screen. The bottom sheet must slide up from the bottom, covering approximately 1/4 of the screen height, with a dark background matching the app theme.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BankSelectionSheet.tsx",
+          "frontend/src/pages/PaymentEntryPage.tsx",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BankSelectionSheet.tsx",
+          "frontend/src/pages/PaymentEntryPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-32",
+        "summary": "Inside the bank selection bottom sheet, render two bank rows: (1) HDFC Bank row — inline SVG logo recreating the HDFC Bank visual identity (red bracket/frame icon with a blue square center, paired with 'HDFC BANK' text on a blue bar with white lettering, matching the uploaded reference image) on the left, and account ending '·· 3107' on the right; (2) SBI Bank row — standard SBI blue circular emblem (recreated as inline SVG: blue circle with a white keyhole/torch symbol and 'SBI' text) on the left, and account ending '·· 3110' on the right. Below both rows, display the text 'Choose to continue your bank for transaction' in small gray text.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BankRow.tsx",
+          "frontend/src/components/BankLogos.tsx",
+          "frontend/src/components/BankSelectionSheet.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BankRow.tsx",
+          "frontend/src/components/BankLogos.tsx",
+          "frontend/src/components/BankSelectionSheet.tsx"
+        ]
+      },
+      {
+        "id": "REQ-33",
+        "summary": "At the bottom of the bank selection bottom sheet, render two buttons side by side: a 'Cancel' button with a gray background/text that dismisses the bottom sheet and returns to the payment entry screen, and a 'Continue' button with a blue (#1a73e8) background and white text that closes the bottom sheet and navigates to the payment success screen.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BankSelectionSheet.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BankSelectionSheet.tsx"
+        ]
+      },
+      {
+        "id": "REQ-34",
+        "summary": "Update PaymentSuccessPage.tsx Phase 1 (first 5 seconds) to remain unchanged: large blue circle with animated white checkmark centered, and large ₹ amount in white text below it. Update Phase 2 (after 5 seconds fade-in) bottom area to show: 'powered by' in very small white uppercase text, a GPay/UPI logo mark slightly larger than the 'powered by' text, centered at the bottom — these replace or supplement the existing 'POWERED BY UPI' text element. Below that, render two pill buttons: a 'Cancel ✕' button with a gray background and white text (closes/returns to home), and a 'Continue' button with a blue (#1a73e8) background and white text. These two buttons appear at the end of the Phase 2 fade-in.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/PaymentSuccessPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/PaymentSuccessPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-35",
+        "summary": "After 5 seconds on the PaymentSuccessPage (i.e., a second timer or the same Phase 2 reveal), replace the 'Cancel ✕' and 'Continue' buttons with two new buttons: a 'Screenshot receipt' outlined pill button on the left, and a 'Continue' solid blue (#1a73e8) pill button with white text on the right. The 'Continue' button navigates back to the home screen. The 'Screenshot receipt' button may show a toast/snackbar saying 'Screenshot saved' as a mock action.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/PaymentSuccessPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/PaymentSuccessPage.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/BankLogos.tsx",
+    "frontend/src/components/BankRow.tsx",
+    "frontend/src/components/BankSelectionSheet.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/PaymentEntryPage.tsx",
+    "frontend/src/pages/PaymentSuccessPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

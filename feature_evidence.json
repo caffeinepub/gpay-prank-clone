@@ -1,0 +1,122 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-small-vertical-spacing-gap-e-g-mb-4-or-mt-4-16px-between-the-gpay-multicolor-logo-and-the-quick-action-icons-grid-on-the-home-screen-homepage-tsx-so-the-two-elements-are-visually-separated",
+      "featureTitle": "Add a small vertical spacing gap (e.g. mb-4 or mt-4, ~16px) between the GPay multicolor logo and the quick action icons grid on the home screen (HomePage.tsx), so the two elements are visually separated.",
+      "files": [
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-30"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-in-paymententrypage-tsx-after-the-user-fills-in-recipient-details-and-taps-the-pay-send-button-and-correct-pin-is-entered-display-a-bank-selection-bottom-sheet-before-navigating-to-the-payment-success-screen-the-bottom-sheet-must-slide-up-from-the-bottom-covering-approximately-1-4-of-the-screen-height-with-a-dark-background-matching-the-app-theme",
+      "featureTitle": "In PaymentEntryPage.tsx, after the user fills in recipient details and taps the Pay/Send button (and correct PIN is entered), display a bank selection bottom sheet before navigating to the payment success screen. The bottom sheet must slide up from the bottom, covering approximately 1/4 of the screen height, with a dark background matching the app theme.",
+      "files": [
+        "frontend/src/components/BankSelectionSheet.tsx",
+        "frontend/src/pages/PaymentEntryPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-31"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-inside-the-bank-selection-bottom-sheet-render-two-bank-rows-1-hdfc-bank-row-inline-svg-logo-recreating-the-hdfc-bank-visual-identity-red-bracket-frame-icon-with-a-blue-square-center-paired-with-hdfc-bank-text-on-a-blue-bar-with-white-lettering-matching-the-uploaded-reference-image-on-the-left-and-account-ending-3107-on-the-right-2-sbi-bank-row-standard-sbi-blue-circular-emblem-recreated-as-inline-svg-blue-circle-with-a-white-keyhole-torch-symbol-and-sbi-text-on-the-left-and-account-ending-3110-on-the-right-below-both-rows-display-the-text-choose-to-continue-your-bank-for-transaction-in-small-gray-text",
+      "featureTitle": "Inside the bank selection bottom sheet, render two bank rows: (1) HDFC Bank row — inline SVG logo recreating the HDFC Bank visual identity (red bracket/frame icon with a blue square center, paired with 'HDFC BANK' text on a blue bar with white lettering, matching the uploaded reference image) on the left, and account ending '·· 3107' on the right; (2) SBI Bank row — standard SBI blue circular emblem (recreated as inline SVG: blue circle with a white keyhole/torch symbol and 'SBI' text) on the left, and account ending '·· 3110' on the right. Below both rows, display the text 'Choose to continue your bank for transaction' in small gray text.",
+      "files": [
+        "frontend/src/components/BankLogos.tsx",
+        "frontend/src/components/BankRow.tsx",
+        "frontend/src/components/BankSelectionSheet.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-32"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-at-the-bottom-of-the-bank-selection-bottom-sheet-render-two-buttons-side-by-side-a-cancel-button-with-a-gray-background-text-that-dismisses-the-bottom-sheet-and-returns-to-the-payment-entry-screen-and-a-continue-button-with-a-blue-1a73e8-background-and-white-text-that-closes-the-bottom-sheet-and-navigates-to-the-payment-success-screen",
+      "featureTitle": "At the bottom of the bank selection bottom sheet, render two buttons side by side: a 'Cancel' button with a gray background/text that dismisses the bottom sheet and returns to the payment entry screen, and a 'Continue' button with a blue (#1a73e8) background and white text that closes the bottom sheet and navigates to the payment success screen.",
+      "files": [
+        "frontend/src/components/BankSelectionSheet.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-33"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-paymentsuccesspage-tsx-phase-1-first-5-seconds-to-remain-unchanged-large-blue-circle-with-animated-white-checkmark-centered-and-large-amount-in-white-text-below-it-update-phase-2-after-5-seconds-fade-in-bottom-area-to-show-powered-by-in-very-small-white-uppercase-text-a-gpay-upi-logo-mark-slightly-larger-than-the-powered-by-text-centered-at-the-bottom-these-replace-or-supplement-the-existing-powered-by-upi-text-element-below-that-render-two-pill-buttons-a-cancel-button-with-a-gray-background-and-white-text-closes-returns-to-home-and-a-continue-button-with-a-blue-1a73e8-background-and-white-text-these-two-buttons-appear-at-the-end-of-the-phase-2-fade-in",
+      "featureTitle": "Update PaymentSuccessPage.tsx Phase 1 (first 5 seconds) to remain unchanged: large blue circle with animated white checkmark centered, and large ₹ amount in white text below it. Update Phase 2 (after 5 seconds fade-in) bottom area to show: 'powered by' in very small white uppercase text, a GPay/UPI logo mark slightly larger than the 'powered by' text, centered at the bottom — these replace or supplement the existing 'POWERED BY UPI' text element. Below that, render two pill buttons: a 'Cancel ✕' button with a gray background and white text (closes/returns to home), and a 'Continue' button with a blue (#1a73e8) background and white text. These two buttons appear at the end of the Phase 2 fade-in.",
+      "files": [
+        "frontend/src/pages/PaymentSuccessPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-34"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-after-5-seconds-on-the-paymentsuccesspage-i-e-a-second-timer-or-the-same-phase-2-reveal-replace-the-cancel-and-continue-buttons-with-two-new-buttons-a-screenshot-receipt-outlined-pill-button-on-the-left-and-a-continue-solid-blue-1a73e8-pill-button-with-white-text-on-the-right-the-continue-button-navigates-back-to-the-home-screen-the-screenshot-receipt-button-may-show-a-toast-snackbar-saying-screenshot-saved-as-a-mock-action",
+      "featureTitle": "After 5 seconds on the PaymentSuccessPage (i.e., a second timer or the same Phase 2 reveal), replace the 'Cancel ✕' and 'Continue' buttons with two new buttons: a 'Screenshot receipt' outlined pill button on the left, and a 'Continue' solid blue (#1a73e8) pill button with white text on the right. The 'Continue' button navigates back to the home screen. The 'Screenshot receipt' button may show a toast/snackbar saying 'Screenshot saved' as a mock action.",
+      "files": [
+        "frontend/src/pages/PaymentSuccessPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-35"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

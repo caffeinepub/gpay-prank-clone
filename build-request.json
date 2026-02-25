@@ -1,0 +1,146 @@
+{
+  "kind": "build_request",
+  "title": "Bank selection bottom sheet + updated payment success screen with HDFC/SBI logos",
+  "projectName": "GPay Prank Clone",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-30",
+      "text": "Add a small vertical spacing gap (e.g. mb-4 or mt-4, ~16px) between the GPay multicolor logo and the quick action icons grid on the home screen (HomePage.tsx), so the two elements are visually separated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "Add a little space between quick action icons and gpay logo at the upperside."
+        ]
+      },
+      "acceptanceCriteria": [
+        "There is a visible gap of approximately 16px between the bottom of the GPay logo element and the top of the QuickActions grid on the home screen.",
+        "No other layout or spacing is affected."
+      ]
+    },
+    {
+      "id": "REQ-31",
+      "text": "In PaymentEntryPage.tsx, after the user fills in recipient details and taps the Pay/Send button (and correct PIN is entered), display a bank selection bottom sheet before navigating to the payment success screen. The bottom sheet must slide up from the bottom, covering approximately 1/4 of the screen height, with a dark background matching the app theme.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3",
+          "msg-5"
+        ],
+        "quotes": [
+          "after enetering no. And name and after clicking pay/send make Hdfc bank and SBI bank pop up on from the bottom covering only 1/4 part of the bottom area"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After the PIN is confirmed on PaymentEntryPage, a bottom sheet animates up from the bottom of the screen before the payment success screen appears.",
+        "The bottom sheet covers approximately 1/4 of the viewport height.",
+        "The bottom sheet has a dark background consistent with the app's dark theme (#0a0f1e or similar).",
+        "The bottom sheet slides in with a smooth upward transition animation."
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "text": "Inside the bank selection bottom sheet, render two bank rows: (1) HDFC Bank row — inline SVG logo recreating the HDFC Bank visual identity (red bracket/frame icon with a blue square center, paired with 'HDFC BANK' text on a blue bar with white lettering, matching the uploaded reference image) on the left, and account ending '·· 3107' on the right; (2) SBI Bank row — standard SBI blue circular emblem (recreated as inline SVG: blue circle with a white keyhole/torch symbol and 'SBI' text) on the left, and account ending '·· 3110' on the right. Below both rows, display the text 'Choose to continue your bank for transaction' in small gray text.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3",
+          "msg-5",
+          "msg-7"
+        ],
+        "quotes": [
+          "add HDFC bank Logo with 3107 in row section",
+          "Show SBI standard logo and add the digit 3110",
+          "HDFC Bank logo (red bracket frame + blue square center + 'HDFC BANK' on blue bar) with account ·· 3107",
+          "SBI Bank (standard blue circular emblem) with account ·· 3110",
+          "'Choose to continue your bank for transaction' text below the bank rows"
+        ]
+      },
+      "acceptanceCriteria": [
+        "HDFC Bank row shows an inline SVG logo: red bracket/frame outer shape with a blue square in the center, plus 'HDFC BANK' text on a blue background bar with white letters — visually matching the uploaded reference image.",
+        "HDFC Bank row shows '·· 3107' account number on the right side of the row.",
+        "SBI Bank row shows a blue circular emblem SVG (standard SBI-style logo) on the left.",
+        "SBI Bank row shows '·· 3110' account number on the right side of the row.",
+        "Below the two bank rows, 'Choose to continue your bank for transaction' is displayed in small gray text."
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "text": "At the bottom of the bank selection bottom sheet, render two buttons side by side: a 'Cancel' button with a gray background/text that dismisses the bottom sheet and returns to the payment entry screen, and a 'Continue' button with a blue (#1a73e8) background and white text that closes the bottom sheet and navigates to the payment success screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3",
+          "msg-5"
+        ],
+        "quotes": [
+          "add the button cancel in gray icon and continue in blue icon",
+          "Cancel (gray) + Continue (blue) buttons at the bottom"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A 'Cancel' button is displayed at the bottom left/center of the bottom sheet with a gray style; tapping it dismisses the sheet and returns to PaymentEntryPage.",
+        "A 'Continue' button is displayed at the bottom right/center of the bottom sheet with a blue (#1a73e8) background and white text; tapping it triggers navigation to PaymentSuccessPage.",
+        "Both buttons are styled as rounded pill or rounded-corner buttons consistent with the app theme."
+      ]
+    },
+    {
+      "id": "REQ-34",
+      "text": "Update PaymentSuccessPage.tsx Phase 1 (first 5 seconds) to remain unchanged: large blue circle with animated white checkmark centered, and large ₹ amount in white text below it. Update Phase 2 (after 5 seconds fade-in) bottom area to show: 'powered by' in very small white uppercase text, a GPay/UPI logo mark slightly larger than the 'powered by' text, centered at the bottom — these replace or supplement the existing 'POWERED BY UPI' text element. Below that, render two pill buttons: a 'Cancel ✕' button with a gray background and white text (closes/returns to home), and a 'Continue' button with a blue (#1a73e8) background and white text. These two buttons appear at the end of the Phase 2 fade-in.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3",
+          "msg-5"
+        ],
+        "quotes": [
+          "after clicking continue let the payment successful interface appear written 'powered by' in very small text with a little larger Logo or initial of UPI Gpay at the bottom center above 'Cancel X' button and 'Continue' in blue icon button in white text"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Phase 1 (0–5 seconds) is unchanged: only blue circle checkmark + ₹ amount visible.",
+        "Phase 2 fades in after 5 seconds and includes 'powered by' in very small uppercase text above a slightly larger GPay/UPI logo mark, centered at the bottom of the screen.",
+        "Phase 2 shows a 'Cancel ✕' gray pill button and a 'Continue' blue (#1a73e8) pill button with white text at the bottom.",
+        "Tapping 'Cancel ✕' returns the user to the home screen.",
+        "The transaction is still saved to history as before."
+      ]
+    },
+    {
+      "id": "REQ-35",
+      "text": "After 5 seconds on the PaymentSuccessPage (i.e., a second timer or the same Phase 2 reveal), replace the 'Cancel ✕' and 'Continue' buttons with two new buttons: a 'Screenshot receipt' outlined pill button on the left, and a 'Continue' solid blue (#1a73e8) pill button with white text on the right. The 'Continue' button navigates back to the home screen. The 'Screenshot receipt' button may show a toast/snackbar saying 'Screenshot saved' as a mock action.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3",
+          "msg-5"
+        ],
+        "quotes": [
+          "the payment success interface within 5 secs add on the left bottom Screenshot receipt and Continue in blue icons white text"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After the Phase 2 reveal (5-second mark), a second transition occurs that swaps the Cancel/Continue buttons with 'Screenshot receipt' (outlined, left) and 'Continue' (solid blue, white text, right).",
+        "'Continue' navigates back to HomePage.",
+        "'Screenshot receipt' performs a mock action (e.g., displays a brief 'Screenshot saved' toast) and does not crash."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify any files listed in frontend.immutablePaths.",
+    "All logos (HDFC Bank, SBI) must be recreated as inline SVG or styled HTML — do not use external image URLs.",
+    "Bank selection bottom sheet must only appear after PIN is validated, not before."
+  ],
+  "nonGoals": [
+    "Real bank API integration or actual transaction processing.",
+    "Actual screenshot capture functionality (mock/toast is sufficient).",
+    "Changes to the backend Motoko actor.",
+    "Any changes to the contact circles, history page, or transaction detail page."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

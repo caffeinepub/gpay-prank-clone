@@ -1,0 +1,127 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Bank selection bottom sheet + updated payment success screen with HDFC/SBI logos",
+  "requirements": [
+    {
+      "id": "REQ-30",
+      "summary": "Add vertical spacing gap between GPay logo and quick action icons on home screen",
+      "acceptanceCriteria": [
+        "There is a visible gap of approximately 16px between the bottom of the GPay logo element and the top of the QuickActions grid on the home screen.",
+        "No other layout or spacing is affected."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Add mb-4 or mt-4 utility class (approximately 16px spacing) to create vertical gap between the GPay multicolor logo element and the QuickActions component. Update the layout container wrapping these two elements to ensure proper spacing without affecting other page elements."
+        }
+      ]
+    },
+    {
+      "id": "REQ-31",
+      "summary": "Display bank selection bottom sheet after PIN validation on payment entry page",
+      "acceptanceCriteria": [
+        "After the PIN is confirmed on PaymentEntryPage, a bottom sheet animates up from the bottom of the screen before the payment success screen appears.",
+        "The bottom sheet covers approximately 1/4 of the viewport height.",
+        "The bottom sheet has a dark background consistent with the app's dark theme (#0a0f1e or similar).",
+        "The bottom sheet slides in with a smooth upward transition animation."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BankSelectionSheet.tsx",
+          "operation": "create",
+          "description": "Create a new reusable bottom sheet component that slides up from the bottom with a smooth animation (CSS transition or Framer Motion). The sheet should cover approximately 25% of the viewport height (h-1/4 or min-h-[25vh]), use a dark background matching the app theme (#0a0f1e), include rounded top corners, and accept props for visibility state, bank rows content, and action buttons. Add a semi-transparent backdrop overlay that dismisses the sheet when clicked."
+        },
+        {
+          "path": "frontend/src/pages/PaymentEntryPage.tsx",
+          "operation": "modify",
+          "description": "After successful PIN validation, set a state flag to display the BankSelectionSheet component instead of immediately navigating to PaymentSuccessPage. Pass recipient/amount data and navigation callbacks to the sheet. The sheet's 'Continue' action will trigger navigation to PaymentSuccessPage with transaction data, while 'Cancel' will dismiss the sheet and keep the user on PaymentEntryPage."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add CSS keyframe animations for the bottom sheet slide-up transition (e.g., @keyframes slideUp with transform: translateY) and backdrop fade-in. Ensure animations are smooth (duration ~300ms, ease-out timing) and consistent with the app's existing animation patterns."
+        }
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "summary": "Render HDFC Bank and SBI Bank rows with inline SVG logos and account numbers inside bottom sheet",
+      "acceptanceCriteria": [
+        "HDFC Bank row shows an inline SVG logo: red bracket/frame outer shape with a blue square in the center, plus 'HDFC BANK' text on a blue background bar with white letters — visually matching the uploaded reference image.",
+        "HDFC Bank row shows '·· 3107' account number on the right side of the row.",
+        "SBI Bank row shows a blue circular emblem SVG (standard SBI-style logo) on the left.",
+        "SBI Bank row shows '·· 3110' account number on the right side of the row.",
+        "Below the two bank rows, 'Choose to continue your bank for transaction' is displayed in small gray text."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BankRow.tsx",
+          "operation": "create",
+          "description": "Create a reusable bank row component that displays a bank logo (passed as ReactNode/JSX), bank name, and masked account number on the right (e.g., '·· 3107'). Style the row with flex layout, padding, hover state, and a subtle border/divider. Make the row clickable/selectable with visual feedback (e.g., background highlight on tap)."
+        },
+        {
+          "path": "frontend/src/components/BankLogos.tsx",
+          "operation": "create",
+          "description": "Create inline SVG components for HDFC Bank and SBI Bank logos. HDFC Bank SVG: recreate the red bracket/frame outer shape (four corner L-shapes) with a centered blue square, matching the uploaded reference image (IMG_20260224_082458.JPG). Include a separate inline element for 'HDFC BANK' text on a blue rectangular background bar with white uppercase letters. SBI Bank SVG: create a blue circular emblem with a white keyhole or torch symbol and 'SBI' text, matching standard SBI branding. Export both as React functional components returning SVG elements with appropriate viewBox, width, height, and color props."
+        },
+        {
+          "path": "frontend/src/components/BankSelectionSheet.tsx",
+          "operation": "modify",
+          "description": "Import BankRow and BankLogos components. Render two BankRow instances inside the sheet content area: (1) HDFC Bank row with HdfcBankLogo and account '·· 3107', (2) SBI Bank row with SbiBankLogo and account '·· 3110'. Below the rows, add a small gray text label reading 'Choose to continue your bank for transaction' with reduced opacity (text-gray-400 or similar). Ensure proper spacing and alignment between rows and helper text."
+        }
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "summary": "Add Cancel and Continue buttons at the bottom of the bank selection sheet",
+      "acceptanceCriteria": [
+        "A 'Cancel' button is displayed at the bottom left/center of the bottom sheet with a gray style; tapping it dismisses the sheet and returns to PaymentEntryPage.",
+        "A 'Continue' button is displayed at the bottom right/center of the bottom sheet with a blue (#1a73e8) background and white text; tapping it triggers navigation to PaymentSuccessPage.",
+        "Both buttons are styled as rounded pill or rounded-corner buttons consistent with the app theme."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BankSelectionSheet.tsx",
+          "operation": "modify",
+          "description": "At the bottom of the sheet content, render a horizontal button group with two pill-style buttons: (1) 'Cancel' button with gray background (bg-gray-600 or similar), white text, and onClick handler that closes the sheet and keeps the user on PaymentEntryPage; (2) 'Continue' button with blue (#1a73e8) background, white text, and onClick handler that closes the sheet and triggers navigation to PaymentSuccessPage. Use flex layout (flex justify-between or space-x gap) to position buttons side by side, and apply rounded-full or rounded-lg classes for pill styling consistent with existing app buttons (reference gpay-btn class in index.css)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-34",
+      "summary": "Update PaymentSuccessPage Phase 2 to show 'powered by' text, GPay/UPI logo, and Cancel/Continue buttons",
+      "acceptanceCriteria": [
+        "Phase 1 (0–5 seconds) is unchanged: only blue circle checkmark + ₹ amount visible.",
+        "Phase 2 fades in after 5 seconds and includes 'powered by' in very small uppercase text above a slightly larger GPay/UPI logo mark, centered at the bottom of the screen.",
+        "Phase 2 shows a 'Cancel ✕' gray pill button and a 'Continue' blue (#1a73e8) pill button with white text at the bottom.",
+        "Tapping 'Cancel ✕' returns the user to the home screen.",
+        "The transaction is still saved to history as before."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/PaymentSuccessPage.tsx",
+          "operation": "modify",
+          "description": "Keep Phase 1 (0–5 seconds) unchanged with the animated blue circle checkmark and large rupee amount. Update Phase 2 (after 5-second fade-in) to include a bottom section that displays: (1) 'powered by' in very small uppercase text (text-xs uppercase text-white/60 or similar), (2) a GPay/UPI logo mark or text slightly larger than the 'powered by' text, centered below it (reuse the GPay multicolor logo SVG or create a simple 'UPI' text mark), (3) two pill buttons below the logo: 'Cancel ✕' (gray background, white text, navigates to HomePage) and 'Continue' (blue #1a73e8 background, white text). Ensure these elements fade in together with the existing Phase 2 content. Update the navigation callback for 'Cancel ✕' to use the home navigation prop from App.tsx."
+        }
+      ]
+    },
+    {
+      "id": "REQ-35",
+      "summary": "After 5 seconds on PaymentSuccessPage, replace Cancel/Continue buttons with Screenshot receipt and Continue buttons",
+      "acceptanceCriteria": [
+        "After the Phase 2 reveal (5-second mark), a second transition occurs that swaps the Cancel/Continue buttons with 'Screenshot receipt' (outlined, left) and 'Continue' (solid blue, white text, right).",
+        "'Continue' navigates back to HomePage.",
+        "'Screenshot receipt' performs a mock action (e.g., displays a brief 'Screenshot saved' toast) and does not crash."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/PaymentSuccessPage.tsx",
+          "operation": "modify",
+          "description": "Add a second timer or state transition at the 5-second mark (or immediately after Phase 2 fades in) that replaces the 'Cancel ✕' and 'Continue' button pair with a new button pair: (1) 'Screenshot receipt' outlined pill button on the left (border-white/40, bg-transparent, white text), which on click shows a brief toast/snackbar message 'Screenshot saved' (use a temporary state and setTimeout to auto-dismiss after 2-3 seconds), and (2) 'Continue' solid blue (#1a73e8) pill button on the right (same styling as before), which navigates back to HomePage. Ensure the button swap is smooth (use conditional rendering or CSS transition) and maintains the same layout positioning."
+        }
+      ]
+    }
+  ]
+}

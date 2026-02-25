@@ -1,0 +1,475 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 11,
+  "summary": "A GPay-style prank payment app (web) with dark theme. Features: GPay-style home screen with search bar at top, GPay multicolor logo centered below search bar, quick action icons as circular blue background with white symbols and white text underneath, bottom navigation (Home, Money, You tabs), profile picture upload from gallery, 3 contact circles (two renamed to 'Erika Mate' and 'Nengneilhing Kipgen'), QR scanner icon left of Send Money, Check CIBIL Score, Check Balance, and See Transaction History rows on home screen, balance check locked behind PIN '1234' (hint text hidden) with customizable fake balance, simulated QR scanner, search by number & manual UPI ID entry, Instant Loan / Mobile Recharge / DTH Recharge options, custom 4-digit payment PIN required on every transaction, bank selection bottom sheet (HDFC Bank with logo and account ·· 3107, SBI Bank with standard logo and account ·· 3110, 'Choose to continue your bank for transaction' text, Cancel/Continue buttons) slides up after tapping Pay/Send, payment success screen with animated blue tick mark and GPay-style success sound (first 5 seconds shows only blue circle checkmark + large ₹ amount, after 5 seconds all remaining details fade in including 'powered by' small text + GPay/UPI logo, Cancel X gray button + Continue blue button, then after 5 seconds Screenshot receipt + Continue buttons), 'Done' button blue with white text, payment history auto-updated with time/date stamps after each transaction, and a transaction detail screen showing avatar with initials, contact name, banking name, phone number, joined date, amount, paid status with timestamp, and a Pay button. Small spacing gap added between quick action icons and GPay logo on home screen.",
+  "architectural_notes": [
+    "Two separate PINs: '1234' for balance reveal/customization, user-created 4-digit PIN for payment authorization",
+    "QR scanner is simulated (not real camera-based) to work reliably as a web app",
+    "Bottom nav has 3 tabs: Home (house icon), Money (₹ icon), You (profile icon) — active tab highlighted with teal pill",
+    "Bank selection bottom sheet covers ~1/4 of screen, slides up after Pay/Send tap; HDFC (·· 3107) and SBI (·· 3110) are the two selectable banks"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-build-a-gpay-style-home-screen-ui-with-a-teal-green-color-scheme-matching-google-pay-s-visual-identity-include-a-top-header-with-a-greeting-and-profile-icon-bottom-navigation-bar-with-home-scan-history-and-balance-icons-and-a-visually-convincing-layout-with-gpay-style-typography-and-card-elements",
+      "title": "Build a GPay-style home screen UI with a teal/green color scheme matching Google Pay's visual identity. Include a top header with a greeting and profile icon, bottom navigation bar with Home, Scan, History, and Balance icons, and a visually convincing layout with GPay-style typography and card elements.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-3-random-contact-circles-in-the-middle-section-of-the-home-screen-each-circle-shows-a-small-rounded-avatar-with-a-randomly-generated-profile-picture-colorful-illustrated-avatar-or-initials-based-dp-and-a-random-indian-style-contact-name-below-it-these-represent-quick-pay-contacts",
+      "title": "Display 3 random contact circles in the middle section of the home screen. Each circle shows a small rounded avatar with a randomly generated profile picture (colorful illustrated avatar or initials-based DP) and a random Indian-style contact name below it. These represent quick-pay contacts.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-simulated-qr-code-scanner-screen-accessible-from-the-bottom-navigation-or-a-scan-button-when-activated-it-shows-a-camera-like-viewfinder-ui-with-a-scanning-animation-and-after-2-3-seconds-automatically-detects-a-mock-upi-id-e-g-mockuser-ybl-and-navigates-to-the-payment-entry-screen-with-that-upi-id-pre-filled",
+      "title": "Add a simulated QR code scanner screen accessible from the bottom navigation or a scan button. When activated, it shows a camera-like viewfinder UI with a scanning animation, and after 2–3 seconds automatically 'detects' a mock UPI ID (e.g., mockuser@ybl) and navigates to the payment entry screen with that UPI ID pre-filled.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-send-money-section-on-the-home-screen-with-a-search-field-to-enter-a-phone-number-or-upi-id-manually-entering-a-number-upi-id-and-confirming-navigates-to-the-payment-entry-screen-with-the-recipient-field-pre-filled",
+      "title": "Add a 'Send Money' section on the home screen with a search field to enter a phone number or UPI ID manually. Entering a number/UPI ID and confirming navigates to the payment entry screen with the recipient field pre-filled.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-quick-action-icon-tiles-on-the-home-screen-for-instant-loan-mobile-recharge-and-dth-recharge-each-tile-should-have-a-representative-icon-and-label-styled-like-gpay-s-home-grid-tapping-any-tile-shows-a-coming-soon-or-mock-placeholder-screen",
+      "title": "Add quick-action icon tiles on the home screen for: Instant Loan, Mobile Recharge, and DTH Recharge. Each tile should have a representative icon and label styled like GPay's home grid. Tapping any tile shows a 'Coming Soon' or mock placeholder screen.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-balance-check-feature-accessible-from-the-bottom-navigation-when-tapped-prompt-the-user-to-enter-a-4-digit-pin-the-pin-is-hardcoded-as-1234-on-correct-entry-display-the-current-fake-balance-also-provide-an-option-on-this-screen-to-customize-set-the-fake-balance-amount-to-any-value-the-user-types",
+      "title": "Implement a Balance Check feature accessible from the bottom navigation. When tapped, prompt the user to enter a 4-digit PIN. The PIN is hardcoded as '1234'. On correct entry, display the current fake balance. Also provide an option on this screen to customize/set the fake balance amount to any value the user types.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-one-time-payment-pin-setup-flow-on-first-launch-prompt-the-user-to-create-a-custom-4-digit-payment-pin-store-it-in-local-state-every-time-the-user-initiates-a-payment-require-entry-of-this-custom-pin-before-processing",
+      "title": "Implement a one-time Payment PIN setup flow. On first launch, prompt the user to create a custom 4-digit payment PIN. Store it in local state. Every time the user initiates a payment, require entry of this custom PIN before processing.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-payment-entry-screen-where-the-user-fills-in-recipient-name-recipient-phone-number-or-upi-id-and-amount-include-a-pay-button-on-tapping-pay-show-the-4-digit-payment-pin-entry-prompt-on-correct-pin-navigate-to-the-payment-success-screen",
+      "title": "Build a payment entry screen where the user fills in: recipient name, recipient phone number or UPI ID, and amount. Include a 'Pay' button. On tapping Pay, show the 4-digit payment PIN entry prompt. On correct PIN, navigate to the payment success screen.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-payment-success-screen-styled-like-gpay-s-success-confirmation-it-must-display-a-large-animated-green-tick-mark-recipient-name-recipient-number-upi-id-and-amount-paid-play-a-gpay-style-success-chime-sound-automatically-when-the-screen-appears-include-a-done-button-to-return-to-the-home-screen",
+      "title": "Build a payment success screen styled like GPay's success confirmation. It must display: a large animated green tick mark, recipient name, recipient number/UPI ID, and amount paid. Play a GPay-style success chime sound automatically when the screen appears. Include a 'Done' button to return to the home screen.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-gpay-inspired-visual-theme-throughout-the-app-deep-dark-background-0a0f1e-or-similar-for-screens-teal-cyan-accent-colors-00c9a7-or-similar-for-buttons-and-highlights-white-text-for-primary-content-and-clean-card-style-containers-use-rounded-corners-subtle-shadows-and-gpay-style-icon-styles-consistently-across-all-screens",
+      "title": "Apply a cohesive GPay-inspired visual theme throughout the app: deep dark background (#0a0f1e or similar) for screens, teal/cyan accent colors (#00c9a7 or similar) for buttons and highlights, white text for primary content, and clean card-style containers. Use rounded corners, subtle shadows, and GPay-style icon styles consistently across all screens.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-switch-the-entire-app-to-a-light-theme-all-screens-must-use-a-pure-white-ffffff-background-dark-text-for-primary-content-and-teal-accent-colors-preserved-for-buttons-and-highlights-remove-all-dark-background-colors-from-index-css-app-tsx-and-all-page-component-files",
+      "title": "Switch the entire app to a light theme: all screens must use a pure white (#ffffff) background, dark text for primary content, and teal accent colors preserved for buttons and highlights. Remove all dark background colors from index.css, App.tsx, and all page/component files.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-gallery-file-upload-option-for-the-top-profile-icon-on-the-home-screen-when-the-user-taps-the-profile-icon-a-file-input-opens-allowing-them-to-pick-an-image-from-their-device-the-selected-image-is-stored-in-localstorage-as-a-base64-data-url-and-displayed-as-the-profile-icon-contact-circle-avatars-are-not-affected",
+      "title": "Add a gallery/file upload option for the top profile icon on the home screen. When the user taps the profile icon, a file input opens allowing them to pick an image from their device. The selected image is stored in localStorage as a base64 data URL and displayed as the profile icon. Contact circle avatars are not affected.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-contactcircles-tsx-or-contactdata-ts-rename-two-of-the-three-contacts-one-contact-must-be-named-erika-mate-and-another-must-be-named-nengneilhing-kipgen-the-third-contact-keeps-its-existing-name-avatar-images-and-other-contact-data-remain-unchanged",
+      "title": "In ContactCircles.tsx (or contactData.ts), rename two of the three contacts: one contact must be named 'Erika Mate' and another must be named 'Nengneilhing Kipgen'. The third contact keeps its existing name. Avatar images and other contact data remain unchanged.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-my-account-text-from-the-home-screen-header-in-homepage-tsx-the-profile-icon-may-remain-but-the-text-label-my-account-must-not-be-visible",
+      "title": "Remove the 'My Account' text from the home screen header in HomePage.tsx. The profile icon may remain but the text label 'My Account' must not be visible.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-home-screen-add-a-qr-code-scanner-icon-button-to-the-left-of-the-send-money-search-field-tapping-this-icon-navigates-to-the-same-qr-scanner-screen-as-the-bottom-nav-scan-tab",
+      "title": "On the home screen, add a QR code scanner icon button to the left of the Send Money / search field. Tapping this icon navigates to the same QR scanner screen as the bottom nav Scan tab.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-two-tappable-rows-at-the-bottom-of-the-home-screen-content-above-the-bottom-navigation-check-cibil-score-and-check-balance-check-cibil-score-navigates-to-the-comingsoon-page-check-balance-triggers-the-same-pin-protected-balance-flow-as-the-bottom-nav-balance-tab-navigates-to-balancepage",
+      "title": "Add two tappable rows at the bottom of the home screen content (above the bottom navigation): 'Check CIBIL Score' and 'Check Balance'. 'Check CIBIL Score' navigates to the ComingSoon page. 'Check Balance' triggers the same PIN-protected balance flow as the bottom nav Balance tab (navigates to BalancePage).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-balancepage-hide-the-hint-text-that-says-enter-1234-to-customize-balance-or-any-similar-instructional-text-about-using-pin-1234-the-pin-entry-and-balance-display-functionality-must-remain-intact",
+      "title": "On the BalancePage, hide the hint text that says 'Enter 1234 to customize balance' or any similar instructional text about using PIN 1234. The PIN entry and balance display functionality must remain intact.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-after-every-successful-payment-automatically-add-an-entry-to-the-payment-history-list-each-history-entry-must-include-recipient-name-recipient-upi-id-or-phone-number-amount-and-a-timestamp-showing-both-date-and-time-in-small-sized-text-the-history-list-must-reflect-all-payments-made-during-the-current-session-and-persist-in-localstorage-so-it-survives-page-refresh",
+      "title": "After every successful payment, automatically add an entry to the payment history list. Each history entry must include: recipient name, recipient UPI ID or phone number, amount, and a timestamp showing both date and time in small-sized text. The history list must reflect all payments made during the current session and persist in localStorage so it survives page refresh.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-paymentsuccesspage-change-the-animated-tick-checkmark-color-from-green-to-blue-all-other-aspects-of-the-success-animation-and-screen-remain-the-same",
+      "title": "On the PaymentSuccessPage, change the animated tick/checkmark color from green to blue. All other aspects of the success animation and screen remain the same.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-switch-the-entire-app-to-dark-mode-across-all-screens-home-payment-balance-success-history-scanner-coming-soon-pin-setup-transaction-detail-use-a-near-black-background-0a0f1e-or-111118-white-light-gray-primary-text-and-preserve-teal-accent-colors-for-buttons-and-highlights-remove-all-white-light-backgrounds-from-index-css-app-tsx-and-every-page-and-component-file",
+      "title": "Switch the entire app to dark mode across ALL screens (home, payment, balance, success, history, scanner, coming soon, PIN setup, transaction detail). Use a near-black background (#0a0f1e or #111118), white/light-gray primary text, and preserve teal accent colors for buttons and highlights. Remove all white/light backgrounds from index.css, App.tsx, and every page and component file.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-see-transaction-history-tappable-row-on-the-home-screen-placed-between-the-check-balance-row-and-the-check-cibil-score-row-style-it-identically-to-the-other-two-rows-a-left-side-clock-history-icon-bold-label-text-and-a-right-pointing-chevron-arrow-tapping-it-navigates-to-the-historypage-transaction-history-list",
+      "title": "Add a 'See transaction history' tappable row on the home screen, placed between the 'Check Balance' row and the 'Check CIBIL Score' row. Style it identically to the other two rows: a left-side clock/history icon, bold label text, and a right-pointing chevron arrow. Tapping it navigates to the HistoryPage (transaction history list).",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-transactiondetailpage-when-the-user-taps-any-transaction-entry-in-the-history-list-historypage-open-this-detail-screen-the-screen-must-display-1-a-large-circular-avatar-at-center-with-the-recipient-s-initials-on-a-blue-background-2-bold-recipient-name-in-medium-large-sans-serif-font-below-the-avatar-3-a-shield-icon-followed-by-banking-name-recipient-name-in-regular-weight-smaller-font-4-phone-number-or-upi-id-in-regular-weight-5-a-joined-month-year-line-in-light-gray-small-font-generate-a-plausible-static-joined-date-6-a-dark-card-bubble-below-showing-payment-to-recipient-name-label-the-amount-in-large-bold-format-and-a-green-checkmark-circle-with-paid-timestamp-in-small-text-7-a-teal-pay-button-at-the-bottom-of-the-screen-the-recipient-name-and-amount-must-come-from-the-actual-transaction-data-background-is-pure-dark-0a0f1e-font-sans-serif-throughout-include-a-back-arrow-at-the-top-left-to-return-to-history",
+      "title": "Create a TransactionDetailPage. When the user taps any transaction entry in the history list (HistoryPage), open this detail screen. The screen must display: (1) a large circular avatar at center with the recipient's initials on a blue background, (2) bold recipient name in medium-large sans-serif font below the avatar, (3) a shield icon followed by 'Banking name: [recipient name]' in regular weight smaller font, (4) phone number or UPI ID in regular weight, (5) a 'Joined [Month Year]' line in light/gray small font (generate a plausible static joined date), (6) a dark card/bubble below showing 'Payment to [recipient name]' label, the amount in large bold ₹ format, and a green checkmark circle with 'Paid • [timestamp]' in small text, (7) a teal 'Pay' button at the bottom of the screen. The recipient name and amount must come from the actual transaction data. Background is pure dark (#0a0f1e). Font: sans-serif throughout. Include a back arrow at the top left to return to history.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-existing-bottom-navigation-bar-bottomnavigation-tsx-with-a-new-3-tab-bottom-nav-containing-home-house-icon-active-state-shown-as-a-teal-filled-pill-background-behind-the-icon-money-rupee-symbol-icon-and-you-profile-person-icon-style-matches-reference-image-2-dark-background-white-icon-and-label-for-inactive-tabs-teal-pill-highlight-for-the-active-home-tab-the-home-tab-navigates-to-homepage-money-tab-navigates-to-historypage-or-a-placeholder-and-you-tab-navigates-to-a-profile-coming-soon-page",
+      "title": "Replace the existing bottom navigation bar (BottomNavigation.tsx) with a new 3-tab bottom nav containing: 'Home' (house icon, active state shown as a teal filled pill/background behind the icon), 'Money' (₹ rupee symbol icon), and 'You' (profile/person icon). Style matches reference image 2: dark background, white icon and label for inactive tabs, teal pill highlight for the active Home tab. The Home tab navigates to HomePage, Money tab navigates to HistoryPage (or a placeholder), and You tab navigates to a profile/coming-soon page.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-search-bar-at-the-top-of-the-home-screen-homepage-tsx-styled-as-a-rounded-dark-input-field-with-a-search-magnifying-glass-icon-on-the-left-it-should-appear-as-the-topmost-element-in-the-scrollable-home-content-above-the-gpay-logo-and-quick-action-icons",
+      "title": "Add a search bar at the top of the home screen (HomePage.tsx), styled as a rounded dark input field with a search/magnifying glass icon on the left. It should appear as the topmost element in the scrollable home content, above the GPay logo and quick action icons.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-render-the-gpay-multicolor-logo-centered-on-the-home-screen-positioned-below-the-search-bar-and-above-the-quick-action-icons-the-logo-must-show-the-google-g-icon-with-the-four-google-brand-colors-red-top-left-blue-top-right-yellow-bottom-right-green-bottom-left-followed-by-pay-in-white-bold-sans-serif-text-recreate-this-as-an-inline-svg-or-styled-html-element-do-not-use-an-external-image-url",
+      "title": "Render the GPay multicolor logo centered on the home screen, positioned below the search bar and above the quick action icons. The logo must show the Google 'G' icon with the four Google brand colors (red top-left, blue top-right, yellow bottom-right, green bottom-left) followed by 'Pay' in white bold sans-serif text. Recreate this as an inline SVG or styled HTML element — do not use an external image URL.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-quickactions-tsx-so-every-quick-action-tile-renders-as-a-circle-with-a-solid-blue-1a73e8-or-similar-google-blue-background-a-white-svg-icon-symbol-centered-inside-the-circle-and-white-label-text-underneath-the-circle-remove-any-previous-teal-or-dark-card-styling-from-quick-action-tiles",
+      "title": "Update QuickActions.tsx so every quick action tile renders as a circle with a solid blue (#1a73e8 or similar Google blue) background, a white SVG/icon symbol centered inside the circle, and white label text underneath the circle. Remove any previous teal or dark card styling from quick action tiles.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-overhaul-paymentsuccesspage-tsx-to-implement-a-two-phase-reveal-matching-the-reference-screenshot-image-2-phase-1-0-5-seconds-display-only-the-large-blue-circle-with-a-white-animated-checkmark-centered-on-screen-and-the-large-amount-in-white-text-below-it-all-other-elements-must-be-hidden-invisible-during-this-phase-phase-2-after-5-seconds-all-remaining-details-fade-in-simultaneously-paid-to-gray-label-recipient-name-in-white-bold-green-shield-icon-banking-name-recipient-name-in-caps-line-timestamp-e-g-12-april-2025-5-49-pm-in-gray-a-large-empty-spacer-powered-by-upi-logo-text-centered-at-the-bottom-and-the-two-bottom-buttons-share-screenshot-outlined-pill-button-done-solid-blue-pill-button-the-layout-spacing-and-typography-must-closely-match-the-reference-screenshot",
+      "title": "Overhaul PaymentSuccessPage.tsx to implement a two-phase reveal matching the reference screenshot (Image 2): Phase 1 (0–5 seconds): Display ONLY the large blue circle with a white animated checkmark centered on screen and the large ₹ amount in white text below it. All other elements must be hidden/invisible during this phase. Phase 2 (after 5 seconds): All remaining details fade in simultaneously — 'Paid to' gray label, recipient name in white bold, green shield icon + 'Banking name: [RECIPIENT NAME IN CAPS]' line, timestamp (e.g. '12 April 2025, 5:49 pm') in gray, a large empty spacer, 'POWERED BY UPI' logo text centered at the bottom, and the two bottom buttons ('Share screenshot' outlined pill button + 'Done' solid blue pill button). The layout, spacing, and typography must closely match the reference screenshot.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-paymentsuccesspage-render-a-powered-by-upi-logo-using-styled-text-powered-by-in-small-white-uppercase-text-above-upi-in-large-bold-white-text-with-a-right-pointing-arrow-symbol-matching-the-upi-branding-visible-in-the-reference-screenshot-image-2-this-element-must-appear-centered-between-the-timestamp-and-the-bottom-buttons-and-only-after-the-5-second-reveal-delay",
+      "title": "On the PaymentSuccessPage, render a 'POWERED BY UPI' logo using styled text: 'POWERED BY' in small white uppercase text above 'UPI' in large bold white text with a right-pointing arrow symbol, matching the UPI branding visible in the reference screenshot (Image 2). This element must appear centered, between the timestamp and the bottom buttons, and only after the 5-second reveal delay.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-small-vertical-spacing-gap-e-g-mb-4-or-mt-4-16px-between-the-gpay-multicolor-logo-and-the-quick-action-icons-grid-on-the-home-screen-homepage-tsx-so-the-two-elements-are-visually-separated",
+      "title": "Add a small vertical spacing gap (e.g. mb-4 or mt-4, ~16px) between the GPay multicolor logo and the quick action icons grid on the home screen (HomePage.tsx), so the two elements are visually separated.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-paymententrypage-tsx-after-the-user-fills-in-recipient-details-and-taps-the-pay-send-button-and-correct-pin-is-entered-display-a-bank-selection-bottom-sheet-before-navigating-to-the-payment-success-screen-the-bottom-sheet-must-slide-up-from-the-bottom-covering-approximately-1-4-of-the-screen-height-with-a-dark-background-matching-the-app-theme",
+      "title": "In PaymentEntryPage.tsx, after the user fills in recipient details and taps the Pay/Send button (and correct PIN is entered), display a bank selection bottom sheet before navigating to the payment success screen. The bottom sheet must slide up from the bottom, covering approximately 1/4 of the screen height, with a dark background matching the app theme.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-inside-the-bank-selection-bottom-sheet-render-two-bank-rows-1-hdfc-bank-row-inline-svg-logo-recreating-the-hdfc-bank-visual-identity-red-bracket-frame-icon-with-a-blue-square-center-paired-with-hdfc-bank-text-on-a-blue-bar-with-white-lettering-matching-the-uploaded-reference-image-on-the-left-and-account-ending-3107-on-the-right-2-sbi-bank-row-standard-sbi-blue-circular-emblem-recreated-as-inline-svg-blue-circle-with-a-white-keyhole-torch-symbol-and-sbi-text-on-the-left-and-account-ending-3110-on-the-right-below-both-rows-display-the-text-choose-to-continue-your-bank-for-transaction-in-small-gray-text",
+      "title": "Inside the bank selection bottom sheet, render two bank rows: (1) HDFC Bank row — inline SVG logo recreating the HDFC Bank visual identity (red bracket/frame icon with a blue square center, paired with 'HDFC BANK' text on a blue bar with white lettering, matching the uploaded reference image) on the left, and account ending '·· 3107' on the right; (2) SBI Bank row — standard SBI blue circular emblem (recreated as inline SVG: blue circle with a white keyhole/torch symbol and 'SBI' text) on the left, and account ending '·· 3110' on the right. Below both rows, display the text 'Choose to continue your bank for transaction' in small gray text.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-at-the-bottom-of-the-bank-selection-bottom-sheet-render-two-buttons-side-by-side-a-cancel-button-with-a-gray-background-text-that-dismisses-the-bottom-sheet-and-returns-to-the-payment-entry-screen-and-a-continue-button-with-a-blue-1a73e8-background-and-white-text-that-closes-the-bottom-sheet-and-navigates-to-the-payment-success-screen",
+      "title": "At the bottom of the bank selection bottom sheet, render two buttons side by side: a 'Cancel' button with a gray background/text that dismisses the bottom sheet and returns to the payment entry screen, and a 'Continue' button with a blue (#1a73e8) background and white text that closes the bottom sheet and navigates to the payment success screen.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-paymentsuccesspage-tsx-phase-1-first-5-seconds-to-remain-unchanged-large-blue-circle-with-animated-white-checkmark-centered-and-large-amount-in-white-text-below-it-update-phase-2-after-5-seconds-fade-in-bottom-area-to-show-powered-by-in-very-small-white-uppercase-text-a-gpay-upi-logo-mark-slightly-larger-than-the-powered-by-text-centered-at-the-bottom-these-replace-or-supplement-the-existing-powered-by-upi-text-element-below-that-render-two-pill-buttons-a-cancel-button-with-a-gray-background-and-white-text-closes-returns-to-home-and-a-continue-button-with-a-blue-1a73e8-background-and-white-text-these-two-buttons-appear-at-the-end-of-the-phase-2-fade-in",
+      "title": "Update PaymentSuccessPage.tsx Phase 1 (first 5 seconds) to remain unchanged: large blue circle with animated white checkmark centered, and large ₹ amount in white text below it. Update Phase 2 (after 5 seconds fade-in) bottom area to show: 'powered by' in very small white uppercase text, a GPay/UPI logo mark slightly larger than the 'powered by' text, centered at the bottom — these replace or supplement the existing 'POWERED BY UPI' text element. Below that, render two pill buttons: a 'Cancel ✕' button with a gray background and white text (closes/returns to home), and a 'Continue' button with a blue (#1a73e8) background and white text. These two buttons appear at the end of the Phase 2 fade-in.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-after-5-seconds-on-the-paymentsuccesspage-i-e-a-second-timer-or-the-same-phase-2-reveal-replace-the-cancel-and-continue-buttons-with-two-new-buttons-a-screenshot-receipt-outlined-pill-button-on-the-left-and-a-continue-solid-blue-1a73e8-pill-button-with-white-text-on-the-right-the-continue-button-navigates-back-to-the-home-screen-the-screenshot-receipt-button-may-show-a-toast-snackbar-saying-screenshot-saved-as-a-mock-action",
+      "title": "After 5 seconds on the PaymentSuccessPage (i.e., a second timer or the same Phase 2 reveal), replace the 'Cancel ✕' and 'Continue' buttons with two new buttons: a 'Screenshot receipt' outlined pill button on the left, and a 'Continue' solid blue (#1a73e8) pill button with white text on the right. The 'Continue' button navigates back to the home screen. The 'Screenshot receipt' button may show a toast/snackbar saying 'Screenshot saved' as a mock action.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "GPay-style home screen UI with bottom navigation and GPay icons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "3 random contact circles with random avatar DPs displayed in the middle of the home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Simulated QR code scanner that shows a mock UPI ID being scanned",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Search by phone number and manual UPI ID entry for payments",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Instant Loan, Mobile Recharge, and DTH Recharge feature icons/options",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Balance check button (bottom nav) requiring PIN '1234', with customizable fake balance amount",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Custom 4-digit payment PIN created by user, required on every transaction",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Payment flow: enter recipient name, number, amount manually, then pay",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Payment success screen with tick mark, GPay-style icons, and iconic GPay success sound",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Store the following app state in the Motoko backend: the user's custom payment PIN (hashed or plain), and the fake balance amount. Expose query and update methods to read and write these values.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Upload profile picture from gallery for the top profile icon",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Rename two contacts to 'Erika Mate' and 'Nengneilhing Kipgen'",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Remove 'My Account' text from home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Add QR code scanner icon to the left of the Send Money button on home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Add 'Check CIBIL Score' and 'Check Balance' rows at the bottom of the home screen; Check Balance triggers the same PIN-protected flow",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Auto-update payment history/recent payments list after each transaction with time and date stamps (small size)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Hide 'Enter 1234 to customize balance' hint text on the balance screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Change payment success animated tick mark color from green to blue",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Add 'See transaction history' row between 'Check Balance' and 'Check CIBIL Score' on the home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Transaction detail screen when clicking a history item: dark background, circular avatar with initials, bold contact name, banking name, phone number, joined date, large bold amount, Paid status with timestamp, Pay button — recipient name and amount from actual transaction data",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Switch entire app to dark mode across all screens",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Replace bottom navigation with Home, Money, and You tabs with icons styled like reference image",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Add search bar at the top of the home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Add GPay multicolor logo (Google G in red/blue/yellow/green + 'Pay' in white) centered below the search bar, above quick action icons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Quick action icons: circular blue background, white symbol, white text underneath on home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Payment success screen: first 5 seconds show only blue circle checkmark + large ₹ amount; after 5 seconds all remaining details (Paid to, recipient name, banking name, timestamp, POWERED BY UPI, buttons) fade in together",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Change 'Done' button on payment success screen to blue background with white text",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Add small spacing gap between GPay logo and quick action icons on the home screen",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Bank selection bottom sheet slides up after tapping Pay/Send, showing HDFC Bank (red bracket logo + account ·· 3107) and SBI Bank (standard blue emblem + account ·· 3110) rows, 'Choose to continue your bank for transaction' text, Cancel (gray) and Continue (blue) buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Update payment success screen: 'powered by' in very small text + GPay/UPI logo at bottom center, Cancel X (gray) + Continue (blue, white text) buttons; after 5 seconds replace with Screenshot receipt (left) + Continue (blue, white text) buttons",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "GPay Prank Clone",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
