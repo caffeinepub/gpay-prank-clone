@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+    /* Dark theme */
+    --background: 0.10 0.015 250;
+    --foreground: 0.97 0.005 250;
+    --card: 0.14 0.018 250;
+    --card-foreground: 0.97 0.005 250;
+    --popover: 0.14 0.018 250;
+    --popover-foreground: 0.97 0.005 250;
+    --primary: 0.55 0.22 240;
+    --primary-foreground: 0.97 0.005 250;
+    --secondary: 0.18 0.022 250;
+    --secondary-foreground: 0.97 0.005 250;
+    --muted: 0.18 0.022 250;
+    --muted-foreground: 0.60 0.02 250;
+    --accent: 0.55 0.22 240;
+    --accent-foreground: 0.97 0.005 250;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.97 0.005 250;
+    --border: 0.22 0.025 250;
+    --input: 0.18 0.022 250;
+    --ring: 0.55 0.22 240;
+    --chart-1: 0.55 0.22 240;
+    --chart-2: 0.65 0.18 200;
+    --chart-3: 0.60 0.15 220;
+    --chart-4: 0.70 0.2 160;
+    --chart-5: 0.75 0.15 190;
+    --sidebar: 0.12 0.016 250;
+    --sidebar-foreground: 0.97 0.005 250;
+    --sidebar-primary: 0.55 0.22 240;
+    --sidebar-primary-foreground: 0.97 0.005 250;
+    --sidebar-accent: 0.18 0.022 250;
+    --sidebar-accent-foreground: 0.97 0.005 250;
+    --sidebar-border: 0.22 0.025 250;
+    --sidebar-ring: 0.55 0.22 240;
+
+    /* GPay specific tokens - dark theme */
+    --gpay-blue: oklch(0.55 0.22 240);
+    --gpay-blue-dark: oklch(0.45 0.22 240);
+    --gpay-blue-light: oklch(0.70 0.18 240);
+    --gpay-teal: oklch(0.72 0.17 175);
+    --gpay-teal-dark: oklch(0.58 0.16 175);
+    --gpay-teal-light: oklch(0.85 0.12 175);
+    --gpay-bg: oklch(0.10 0.015 250);
+    --gpay-card: oklch(0.14 0.018 250);
+    --gpay-card2: oklch(0.18 0.022 250);
+    --gpay-success: oklch(0.72 0.2 145);
+    --gpay-text: oklch(0.97 0.005 250);
+    --gpay-subtext: oklch(0.60 0.02 250);
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Roboto', 'Google Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    background-color: oklch(0.10 0.015 250);
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@layer components {
+  .gpay-card {
+    background: var(--gpay-card);
+    border-radius: 16px;
+    border: 1px solid oklch(0.22 0.025 250);
+  }
+
+  .gpay-btn {
+    background: var(--gpay-blue);
+    color: oklch(0.97 0.005 250);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .gpay-btn:hover {
+    background: var(--gpay-blue-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px oklch(0.55 0.22 240 / 0.35);
+  }
+
+  .gpay-btn:disabled {
+    background: oklch(0.22 0.025 250);
+    color: oklch(0.45 0.02 250);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .pin-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--gpay-blue);
+    transition: all 0.15s ease;
+  }
+
+  .pin-dot.filled {
+    background: var(--gpay-blue);
+    transform: scale(1.1);
+  }
+
+  /* Quick action tile: no card background, just circle + label */
+  .quick-action-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .quick-action-tile:hover {
+    transform: translateY(-2px);
+  }
+
+  .quick-action-tile:active {
+    transform: scale(0.95);
+  }
+
+  /* Blue circle icon container */
+  .quick-action-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: oklch(0.55 0.22 240);
+  }
+}
+
+@layer utilities {
+  .text-gpay-teal {
+    color: var(--gpay-teal);
+  }
+
+  .bg-gpay-teal {
+    background: var(--gpay-teal);
+  }
+
+  .border-gpay-teal {
+    border-color: var(--gpay-teal);
+  }
+
+  .text-gpay-blue {
+    color: var(--gpay-blue);
+  }
+
+  .bg-gpay-blue {
+    background: var(--gpay-blue);
+  }
+
+  .scanner-line {
+    animation: scan 2s linear infinite;
+  }
+
+  @keyframes scan {
+    0% { top: 10%; }
+    50% { top: 85%; }
+    100% { top: 10%; }
+  }
+
+  @keyframes tick-draw {
+    0% { stroke-dashoffset: 100; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  @keyframes circle-draw {
+    0% { stroke-dashoffset: 283; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  @keyframes success-scale {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  .animate-success-scale {
+    animation: success-scale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.5s ease forwards;
+  }
+
+  .animate-pulse-ring {
+    animation: pulse-ring 1.5s ease-out infinite;
+  }
+
+  .tick-path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: tick-draw 0.5s ease 0.4s forwards;
+  }
+
+  .circle-path {
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    animation: circle-draw 0.6s ease forwards;
+  }
+
+  .scanner-corner {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-color: var(--gpay-blue);
+    border-style: solid;
+  }
+
+  .scanner-corner-tl {
+    top: 0; left: 0;
+    border-width: 3px 0 0 3px;
+    border-radius: 4px 0 0 0;
+  }
+
+  .scanner-corner-tr {
+    top: 0; right: 0;
+    border-width: 3px 3px 0 0;
+    border-radius: 0 4px 0 0;
+  }
+
+  .scanner-corner-bl {
+    bottom: 0; left: 0;
+    border-width: 0 0 3px 3px;
+    border-radius: 0 0 0 4px;
+  }
+
+  .scanner-corner-br {
+    bottom: 0; right: 0;
+    border-width: 0 3px 3px 0;
+    border-radius: 0 0 4px 0;
+  }
+}
