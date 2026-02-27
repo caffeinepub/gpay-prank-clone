@@ -15,7 +15,8 @@ function GPayLogo() {
   return (
     <div className="flex items-center justify-center gap-2 py-4">
       {/* Google G icon */}
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="GPay Logo" role="img">
+        <title>GPay Logo</title>
         <path
           d="M39.2 20.45c0-1.4-.12-2.75-.35-4.05H20v7.66h10.8c-.47 2.5-1.88 4.62-4 6.04v5.02h6.48c3.8-3.5 5.92-8.66 5.92-14.67z"
           fill="#4285F4"
@@ -147,6 +148,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={handleProfilePicClick}
               className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden transition-transform active:scale-95"
               style={{
@@ -171,6 +173,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </div>
           <div className="flex items-center gap-2">
             <button
+              type="button"
               className="w-9 h-9 rounded-full flex items-center justify-center"
               style={{ background: 'oklch(0.18 0.022 250)' }}
             >
@@ -199,6 +202,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           />
           {searchValue ? (
             <button
+              type="button"
               onClick={handleSearch}
               className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: 'oklch(0.55 0.22 240)' }}
@@ -207,6 +211,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </button>
           ) : (
             <button
+              type="button"
               onClick={() => onNavigate('scan')}
               className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: 'oklch(0.55 0.22 240 / 0.15)' }}
@@ -221,9 +226,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </div>
 
       {/* Quick Send Buttons (blue circles) — with top spacing gap from GPay logo */}
-      <div className="px-4 mt-4 mb-4">
-        <div className="grid grid-cols-4 gap-3">
+      <div className="px-4 mt-8 mb-4">
+        <div className="grid grid-cols-5 gap-2">
           {[
+            { label: 'Scan QR', icon: QrCode, action: () => onNavigate('scan') },
             { label: 'Send', icon: Send, action: () => onNavigate('payment', {}) },
             { label: 'Request', icon: ArrowRight, action: () => onNavigate('coming-soon', { feature: 'request' }) },
             { label: 'Pay Bills', icon: ArrowRight, action: () => onNavigate('coming-soon', { feature: 'bills' }) },
@@ -231,14 +237,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           ].map(({ label, icon: Icon, action }) => (
             <button
               key={label}
+              type="button"
               onClick={action}
               className="flex flex-col items-center gap-2 py-2 transition-all active:scale-95"
             >
               <div
-                className="w-14 h-14 rounded-full flex items-center justify-center"
+                className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{ background: 'oklch(0.55 0.22 240)' }}
               >
-                <Icon size={22} style={{ color: 'white' }} />
+                <Icon size={20} style={{ color: 'white' }} />
               </div>
               <span className="text-xs font-medium text-center" style={{ color: 'oklch(0.97 0.005 250)' }}>
                 {label}
@@ -260,6 +267,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       <div className="px-4 mt-4 space-y-1">
         {actionRows.map(({ id, label, icon: Icon, action }) => (
           <button
+            type="button"
             key={id}
             onClick={action}
             className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl transition-all active:scale-[0.98]"

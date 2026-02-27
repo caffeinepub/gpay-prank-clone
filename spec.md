@@ -1,42 +1,41 @@
 # GPay Prank Clone
 
 ## Current State
-- Full GPay-style prank app with dark theme, home screen, payment flow, bank selection sheet (HDFC/SBI), payment success screen with 5-second reveal, transaction history, and transaction detail page.
-- BalancePage uses a single shared balance from the backend (via useGetBalance/useUpdateBalance hooks). It shows PIN entry first, then balance with an Edit button.
-- No per-bank balance storage. No bank selection before PIN in balance flow.
-- No utility/backup buttons anywhere in the app.
-- No disguised wallet icon for balance editing.
+- Home page has a row of 4 quick-send buttons: Send, Request, Pay Bills, History (grid-cols-4)
+- QuickActions component shows 6 service icons in a grid below contact circles
+- GPay logo sits above the quick-send buttons with some spacing
+- PaymentProcessingOverlay shows a spinning ₹ symbol with orbiting blue lines for 2.5s
+- No payment processing animation triggered after bank selection + continue (only after PIN+bank)
 
 ## Requested Changes (Diff)
 
 ### Add
-1. **Check Balance flow — bank selection first**: When user navigates to balance, show HDFC (3107) and SBI (3110) bank rows before PIN entry. Each row has a selectable circle in the top-right corner. Selecting a row marks it with a blue tick. A "Continue" button at the bottom proceeds to PIN entry.
-2. **Per-bank balance storage**: Each bank (hdfc, sbi) stores its own balance independently in localStorage (keys: `gpay_balance_hdfc`, `gpay_balance_sbi`). Starting value: `0.00`. Persists until changed.
-3. **Disguised wallet icon for balance editing**: After PIN is entered and balance is shown, the "Edit" button is replaced by a small wallet icon button (Wallet icon from lucide-react) positioned to the right, slightly below the last digit of the balance. Clicking it reveals the edit input field.
-4. **Backup ZIP button**: In the "You" tab / settings area (or a visible floating area in the app), add a button labeled "Backup ZIP" that collects all localStorage app data (transactions, balances, PIN settings, user inputs) as JSON and downloads it as a `.zip` file containing `backup.json`. Uses JSZip or a manual Blob approach (no external library — use manual ZIP-like approach with a JSON file downloaded directly as `.zip` named `gpay-backup.json`).
-5. **Copy Frontend Code button**: A button that copies the current DOM's rendered HTML (`document.documentElement.outerHTML`) to the clipboard. Shows a brief "Copied!" toast.
-6. **Copy Canister ID button**: A button that parses the canister ID from the current URL (e.g. `https://<canister-id>.icp0.io`) and copies it to clipboard. Shows the canister ID in a small tooltip/label. Shows "Copied!" on success.
-7. All 3 utility buttons placed in a dedicated "Developer Tools" section inside the "You" tab (ComingSoonPage replaced with a proper ProfilePage / "You" page).
+- QR Code Scanner quick-send button: add as a new icon to the LEFT of the Send icon (making it the first button in the row), styled identically (blue circle, white icon, white label "Scan QR")
+- Pay Bills icon moved to just below QR Code Scanner icon (second row position, below Scan QR)
+- Extra vertical spacing (mt-6 or equivalent ~24px gap) between the GPay logo and the quick-send button row
+- New payment processing overlay animation (2–2.05s total):
+  - Phase 1 (0–1s): Google Blue (#4285F4) circular spinner (arc segments ~20px diameter stroke) rotating clockwise smoothly on a semi-transparent #121212 overlay
+  - Phase 2 (1–2.05s): success — bright emerald green checkmark (#00C851, lighter variant) pulsing with cyan/white confetti bursts scattering radially, bounce easing
 
 ### Modify
-- **BalancePage**: Completely rework the flow: Bank selection screen → PIN entry → Balance display (per-bank, with disguised wallet icon edit button). Remove the "Enter 1234 to customize balance" hint text. Balance starts at ₹0.00.
-- **App.tsx**: Add `selectedBankForBalance` state passed to BalancePage so it knows which bank to show balance for.
-- **"You" tab** (currently ComingSoonPage): Replace with a proper page containing the 3 utility buttons (Backup ZIP, Copy Frontend Code, Copy Canister ID) plus a simple profile section.
+- Quick-send button row: change from 4 columns to 5 columns (Scan QR, Send, Request, Pay Bills, History), or arrange as 2 rows of buttons if 5 doesn't fit well on mobile
+- PaymentProcessingOverlay: replace current ₹ spin animation with the new two-phase spinner → success checkmark + confetti animation described above
+- Trigger: the new overlay fires AFTER the user taps "Continue" in the bank selection sheet (same trigger point as now)
 
 ### Remove
-- The old single-balance backend hooks usage in BalancePage (replace with localStorage-based per-bank balance).
-- The "Enter 1234 to customize balance" hint visible text from the balance PIN waiting state.
+- Nothing removed
 
 ## Implementation Plan
-1. Create `BankBalanceSelectionPage.tsx` — shows HDFC/SBI rows with selectable circles, Continue button. On continue, passes selected bank to BalancePage.
-2. Rewrite `BalancePage.tsx` — accept `selectedBank` prop, read/write balance from localStorage per bank, show disguised wallet icon for edit.
-3. Update `App.tsx` — add `selectedBankForBalance` state, wire up the new bank-selection → balance flow.
-4. Create `YouPage.tsx` — replaces ComingSoon for "you" tab. Contains: profile info, Backup ZIP button, Copy Frontend Code button, Copy Canister ID button. Implement each button's logic.
-5. Update `App.tsx` to route "you" tab to `YouPage` instead of `ComingSoonPage`.
+1. In `HomePage.tsx`: add extra top margin (mt-6 or ~24px) between `<GPayLogo />` and the quick-send buttons div
+2. In `HomePage.tsx`: add "Scan QR" as first button in the quick-send grid (navigates to 'scan'), restructure row to show 5 items — use grid-cols-5 or wrap into 2 rows of 3/2 or 3/2
+3. Move "Pay Bills" to below the "Scan QR" position (second row if using 2 rows, or keep in grid naturally as 3rd item if grid-cols-5)
+4. Replace `PaymentProcessingOverlay.tsx` entirely with the new two-phase animation:
+   - Phase 1: full-screen #121212 semi-transparent overlay, centered Google Blue circular arc spinner (stroke-dasharray rotating arc, ~20px stroke-width, ~60px radius)
+   - Phase 2: spinner fades out, green checkmark (#00C851 lighter) draws in with scale/pulse bounce, then cyan+white confetti particles burst radially (10-16 particles, CSS or JS animation, random angles, bounce easing)
+   - Total duration: 2–2.05s, then calls onComplete
+5. Validate: no TypeScript errors, build passes
 
 ## UX Notes
-- Wallet icon (disguised) should be a small `Wallet` icon from lucide-react, placed inline to the right of the balance number row, styled subtly (low opacity, small size ~16px).
-- Bank selection for balance mirrors the payment bank selection visual (rows with top-right selectable circle, blue tick when selected).
-- Backup ZIP downloads a `.json` file named `gpay-backup-<date>.json` (no JSZip needed — just JSON download).
-- Copy buttons show a brief "Copied!" feedback via state toggle.
-- "Copy Canister ID" reads `window.location.hostname` and extracts the canister ID (first segment before `.`).
+- Quick-send buttons: if 5 icons don't fit cleanly in one row on a 375px screen (w-14 icons + labels), use 2 rows: row 1 = [Scan QR, Send, Request], row 2 = [Pay Bills, History] centered, or grid-cols-5 with smaller icon size (w-12)
+- Confetti particles: 12–16 particles, each a small dot or short line, random initial direction (0–360°), travel ~60–100px, fade out, bounce ease; pure CSS keyframe animations with different delays/angles per particle
+- The overlay background should be rgba(18,18,18,0.97) or #121212 with high opacity so it covers the app fully

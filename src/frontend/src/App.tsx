@@ -88,8 +88,8 @@ function AppContent() {
     setCurrentPage('payment-success');
   };
 
-  const handleScanDetected = (upiId: string) => {
-    setNavState({ upiId });
+  const handleScanDetected = (upiId: string, name: string) => {
+    setNavState({ upiId, recipientName: name });
     setCurrentPage('payment');
   };
 

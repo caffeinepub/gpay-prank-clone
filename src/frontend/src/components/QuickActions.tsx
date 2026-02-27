@@ -31,6 +31,7 @@ export default function QuickActions({ onActionClick }: QuickActionsProps) {
           const Icon = action.icon;
           return (
             <button
+              type="button"
               key={action.id}
               onClick={() => onActionClick(action.id)}
               className="flex flex-col items-center gap-2 py-2 transition-all active:scale-95"

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowLeft, User, Phone, IndianRupee } from 'lucide-react';
+import { ArrowLeft, User, Phone, IndianRupee, QrCode } from 'lucide-react';
 import PinEntryDialog from '../components/PinEntryDialog';
 import BankSelectionSheet from '../components/BankSelectionSheet';
+import PaymentProcessingOverlay from '../components/PaymentProcessingOverlay';
 import { usePinContext } from '../context/PinContext';
 
 interface PaymentState {
@@ -24,10 +25,11 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
   const [note, setNote] = useState('');
   const [showPinDialog, setShowPinDialog] = useState(false);
   const [showBankSheet, setShowBankSheet] = useState(false);
+  const [showProcessing, setShowProcessing] = useState(false);
   const [pendingDetails, setPendingDetails] = useState<{ name: string; phone: string; amount: string; upiId: string } | null>(null);
   const { validatePaymentPin } = usePinContext();
 
-  const isFormValid = (name.trim() || phone.trim()) && amount.trim() && parseFloat(amount) > 0;
+  const isFormValid = (name.trim() || phone.trim() || upiId.trim()) && amount.trim() && parseFloat(amount) > 0;
 
   const handlePay = () => {
     if (!isFormValid) return;
@@ -59,7 +61,7 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
   const handleBankContinue = () => {
     setShowBankSheet(false);
     if (pendingDetails) {
-      onSuccess(pendingDetails);
+      setShowProcessing(true);
     }
   };
 
@@ -73,6 +75,7 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
         style={{ borderBottom: '1px solid oklch(0.20 0.022 250)' }}
       >
         <button
+          type="button"
           onClick={onBack}
           className="w-9 h-9 rounded-full flex items-center justify-center"
           style={{ background: 'oklch(0.18 0.022 250)' }}
@@ -96,6 +99,25 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
           <p className="text-xs font-medium mb-3" style={{ color: 'oklch(0.55 0.02 250)' }}>
             RECIPIENT DETAILS
           </p>
+
+          {/* Scanned UPI banner */}
+          {initialState?.upiId && (
+            <div
+              className="flex items-center gap-2 mb-3 px-3 py-2 rounded-xl"
+              style={{
+                background: 'oklch(0.55 0.22 240 / 0.12)',
+                border: '1px solid oklch(0.55 0.22 240 / 0.35)',
+              }}
+            >
+              <QrCode size={14} style={{ color: '#1a73e8', flexShrink: 0 }} />
+              <p className="text-xs" style={{ color: 'oklch(0.60 0.02 250)' }}>
+                Scanned:{' '}
+                <span style={{ color: '#1a73e8', fontWeight: 500 }}>
+                  {initialState.upiId}
+                </span>
+              </p>
+            </div>
+          )}
 
           <div className="flex items-center gap-3 mb-3">
             <div
@@ -174,6 +196,7 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
           <div className="flex flex-wrap gap-2">
             {quickAmounts.map((amt) => (
               <button
+                type="button"
                 key={amt}
                 onClick={() => setAmount(amt)}
                 className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
@@ -217,6 +240,7 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
         }}
       >
         <button
+          type="button"
           onClick={handlePay}
           disabled={!isFormValid}
           className="w-full py-4 rounded-full font-semibold text-base transition-all active:scale-95"
@@ -243,6 +267,18 @@ export default function PaymentEntryPage({ initialState, onBack, onSuccess }: Pa
         onCancel={handleBankCancel}
         onContinue={handleBankContinue}
       />
+
+      {/* Payment Processing Overlay — 2.5s animation before success */}
+      {showProcessing && (
+        <PaymentProcessingOverlay
+          onComplete={() => {
+            setShowProcessing(false);
+            if (pendingDetails) {
+              onSuccess(pendingDetails);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, Zap } from 'lucide-react';
 
 interface ScannerViewfinderProps {
-  onDetected: (upiId: string) => void;
+  onDetected: (upiId: string, name: string) => void;
   onClose: () => void;
 }
 
@@ -13,9 +13,23 @@ const MOCK_UPI_IDS = [
   'retailer@upi',
 ];
 
+function deriveNameFromUpiId(upiId: string): string {
+  const localPart = upiId.split('@')[0] || upiId;
+  // Remove trailing digits
+  const withoutTrailingDigits = localPart.replace(/\d+$/, '');
+  // Split on dots, underscores, hyphens
+  const words = withoutTrailingDigits
+    .split(/[._\-]+/)
+    .filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+  return words.join(' ') || localPart;
+}
+
 export default function ScannerViewfinder({ onDetected, onClose }: ScannerViewfinderProps) {
   const [scanning, setScanning] = useState(true);
   const [detected, setDetected] = useState(false);
+  const [detectedUpiId, setDetectedUpiId] = useState('');
+  const [detectedName, setDetectedName] = useState('');
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -31,9 +45,12 @@ export default function ScannerViewfinder({ onDetected, onClose }: ScannerViewfi
 
     const timer = setTimeout(() => {
       const randomUpi = MOCK_UPI_IDS[Math.floor(Math.random() * MOCK_UPI_IDS.length)];
+      const derivedName = deriveNameFromUpiId(randomUpi);
+      setDetectedUpiId(randomUpi);
+      setDetectedName(derivedName);
       setDetected(true);
       setScanning(false);
-      setTimeout(() => onDetected(randomUpi), 800);
+      setTimeout(() => onDetected(randomUpi, derivedName), 1200);
     }, 2800);
 
     return () => {
@@ -153,6 +170,31 @@ export default function ScannerViewfinder({ onDetected, onClose }: ScannerViewfi
         <p className="text-xs mt-1" style={{ color: 'oklch(0.45 0.02 250)' }}>
           {detected ? 'Redirecting to payment...' : 'Scanning automatically...'}
         </p>
+
+        {/* UPI info card — shown after detection */}
+        {detected && detectedUpiId && (
+          <div
+            className="mt-3 mx-auto rounded-xl px-4 py-3 text-left"
+            style={{
+              background: 'oklch(0.14 0.018 250)',
+              border: '1px solid oklch(0.55 0.22 240 / 0.5)',
+              maxWidth: '300px',
+            }}
+          >
+            <p
+              className="text-xs font-semibold mb-0.5"
+              style={{ color: '#1a73e8' }}
+            >
+              Paying: {detectedName}
+            </p>
+            <p
+              className="text-xs"
+              style={{ color: 'oklch(0.60 0.02 250)' }}
+            >
+              {detectedUpiId}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

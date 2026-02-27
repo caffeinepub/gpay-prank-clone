@@ -273,4 +273,21 @@
     border-width: 0 3px 3px 0;
     border-radius: 0 0 4px 0;
   }
+
+  @keyframes rupee-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes line-sweep {
+    0% { opacity: 0; transform: rotate(0deg); }
+    15% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: rotate(360deg); }
+  }
+
+  @keyframes rupee-pulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
 }
