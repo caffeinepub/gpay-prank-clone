@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 interface PinContextType {
   paymentPin: string | null;
@@ -11,11 +17,11 @@ const PinContext = createContext<PinContextType | undefined>(undefined);
 
 export function PinProvider({ children }: { children: ReactNode }) {
   const [paymentPin, setPaymentPinState] = useState<string | null>(() => {
-    return localStorage.getItem('gpay_payment_pin');
+    return localStorage.getItem("gpay_payment_pin");
   });
 
   const setPaymentPin = (pin: string) => {
-    localStorage.setItem('gpay_payment_pin', pin);
+    localStorage.setItem("gpay_payment_pin", pin);
     setPaymentPinState(pin);
   };
 
@@ -24,12 +30,14 @@ export function PinProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <PinContext.Provider value={{
-      paymentPin,
-      setPaymentPin,
-      validatePaymentPin,
-      isPinSet: !!paymentPin,
-    }}>
+    <PinContext.Provider
+      value={{
+        paymentPin,
+        setPaymentPin,
+        validatePaymentPin,
+        isPinSet: !!paymentPin,
+      }}
+    >
       {children}
     </PinContext.Provider>
   );
@@ -37,6 +45,6 @@ export function PinProvider({ children }: { children: ReactNode }) {
 
 export function usePinContext() {
   const ctx = useContext(PinContext);
-  if (!ctx) throw new Error('usePinContext must be used within PinProvider');
+  if (!ctx) throw new Error("usePinContext must be used within PinProvider");
   return ctx;
 }

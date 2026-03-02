@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // HDFC Bank Logo - recreated as inline SVG matching the reference image
 // Red bracket/frame outer shape with blue square center + HDFC BANK text bar
@@ -12,7 +12,10 @@ export function HdfcBankLogo({ size = 36 }: { size?: number }) {
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label="HDFC Bank Logo"
       >
+        <title>HDFC Bank Logo</title>
         {/* Red bracket frame - four L-shaped corners */}
         {/* Top-left corner */}
         <rect x="5" y="5" width="28" height="12" fill="#E31837" />
@@ -32,21 +35,21 @@ export function HdfcBankLogo({ size = 36 }: { size?: number }) {
       {/* HDFC BANK text bar */}
       <div
         style={{
-          background: '#1A3A8F',
-          padding: '3px 7px',
-          borderRadius: '2px',
-          display: 'flex',
-          alignItems: 'center',
+          background: "#1A3A8F",
+          padding: "3px 7px",
+          borderRadius: "2px",
+          display: "flex",
+          alignItems: "center",
         }}
       >
         <span
           style={{
-            color: 'white',
-            fontWeight: '800',
-            fontSize: '11px',
-            letterSpacing: '0.5px',
+            color: "white",
+            fontWeight: "800",
+            fontSize: "11px",
+            letterSpacing: "0.5px",
             fontFamily: "'Google Sans', 'Roboto', sans-serif",
-            whiteSpace: 'nowrap',
+            whiteSpace: "nowrap",
           }}
         >
           HDFC BANK
@@ -67,7 +70,10 @@ export function SbiBankLogo({ size = 36 }: { size?: number }) {
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label="SBI Bank Logo"
       >
+        <title>SBI Bank Logo</title>
         {/* Outer blue circle */}
         <circle cx="50" cy="50" r="48" fill="#22409A" />
         {/* White ring */}
@@ -101,16 +107,16 @@ export function SbiBankLogo({ size = 36 }: { size?: number }) {
       {/* SBI text label */}
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <span
           style={{
-            color: 'oklch(0.97 0.005 250)',
-            fontWeight: '700',
-            fontSize: '13px',
-            letterSpacing: '0.3px',
+            color: "oklch(0.97 0.005 250)",
+            fontWeight: "700",
+            fontSize: "13px",
+            letterSpacing: "0.3px",
             fontFamily: "'Google Sans', 'Roboto', sans-serif",
             lineHeight: 1.2,
           }}
@@ -119,8 +125,8 @@ export function SbiBankLogo({ size = 36 }: { size?: number }) {
         </span>
         <span
           style={{
-            color: 'oklch(0.55 0.02 250)',
-            fontSize: '10px',
+            color: "oklch(0.55 0.02 250)",
+            fontSize: "10px",
           }}
         >
           SBI

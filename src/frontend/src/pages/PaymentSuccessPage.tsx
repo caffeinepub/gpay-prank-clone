@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ShieldCheck, Camera } from 'lucide-react';
+import { Camera, ShieldCheck } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface PaymentSuccessPageProps {
   details: {
@@ -18,16 +18,25 @@ export interface PaymentHistoryEntry {
   upiId: string;
   amount: string;
   timestamp: string;
-  type: 'sent';
+  type: "sent";
 }
 
-const HISTORY_KEY = 'gpay_payment_history';
+const HISTORY_KEY = "gpay_payment_history";
 
 // GPay multicolor G logo for "powered by" section
 function GPayMark() {
   return (
     <div className="flex items-center gap-1.5">
-      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label="Google Pay logo"
+      >
+        <title>Google Pay logo</title>
         <path
           d="M39.2 20.45c0-1.4-.12-2.75-.35-4.05H20v7.66h10.8c-.47 2.5-1.88 4.62-4 6.04v5.02h6.48c3.8-3.5 5.92-8.66 5.92-14.67z"
           fill="#4285F4"
@@ -48,10 +57,10 @@ function GPayMark() {
       <span
         style={{
           fontFamily: "'Google Sans', 'Roboto', sans-serif",
-          fontSize: '20px',
-          fontWeight: '500',
-          color: 'oklch(0.97 0.005 250)',
-          letterSpacing: '-0.3px',
+          fontSize: "20px",
+          fontWeight: "500",
+          color: "oklch(0.97 0.005 250)",
+          letterSpacing: "-0.3px",
         }}
       >
         Pay
@@ -60,76 +69,106 @@ function GPayMark() {
   );
 }
 
-export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPageProps) {
+export default function PaymentSuccessPage({
+  details,
+  onDone,
+}: PaymentSuccessPageProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [showScreenshotButtons, setShowScreenshotButtons] = useState(false);
   const [screenshotToast, setScreenshotToast] = useState(false);
 
-  const now = new Date();
-  const transactionId = `TXN${Date.now().toString().slice(-10)}`;
+  const nowRef = useRef(new Date());
+  const transactionIdRef = useRef(`TXN${Date.now().toString().slice(-10)}`);
+  const detailsRef = useRef(details);
+  const now = nowRef.current;
 
-  const formattedAmount = `₹${parseFloat(details.amount).toLocaleString('en-IN', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+  const formattedAmount = `₹${Number.parseFloat(details.amount).toLocaleString(
+    "en-IN",
+    {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+  )}`;
 
-  const dateStr = now.toLocaleDateString('en-IN', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+  const dateStr = now.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
-  const timeStr = now.toLocaleTimeString('en-IN', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  }).toLowerCase();
+  const timeStr = now
+    .toLocaleTimeString("en-IN", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase();
   const timestampStr = `${dateStr}, ${timeStr}`;
 
   const bankingName = details.name
     ? details.name.toUpperCase()
-    : 'ACCOUNT HOLDER';
+    : "ACCOUNT HOLDER";
 
   useEffect(() => {
     // Play success tone
     try {
-      const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+      const AudioContext =
+        window.AudioContext ||
+        (
+          window as unknown as {
+            webkitAudioContext: typeof window.AudioContext;
+          }
+        ).webkitAudioContext;
       const ctx = new AudioContext();
 
-      const playTone = (freq: number, start: number, duration: number, gain: number) => {
+      const playTone = (
+        freq: number,
+        start: number,
+        duration: number,
+        gain: number,
+      ) => {
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
         osc.frequency.value = freq;
-        osc.type = 'sine';
+        osc.type = "sine";
         gainNode.gain.setValueAtTime(0, ctx.currentTime + start);
-        gainNode.gain.linearRampToValueAtTime(gain, ctx.currentTime + start + 0.02);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + duration);
+        gainNode.gain.linearRampToValueAtTime(
+          gain,
+          ctx.currentTime + start + 0.02,
+        );
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.001,
+          ctx.currentTime + start + duration,
+        );
         osc.start(ctx.currentTime + start);
         osc.stop(ctx.currentTime + start + duration + 0.1);
       };
 
-      playTone(523.25, 0, 0.3, 0.4);
-      playTone(659.25, 0.15, 0.3, 0.4);
-      playTone(783.99, 0.3, 0.4, 0.4);
-      playTone(1046.5, 0.45, 0.6, 0.35);
+      playTone(523.25, 0, 0.3, 0.6);
+      playTone(659.25, 0.15, 0.3, 0.6);
+      playTone(783.99, 0.3, 0.4, 0.6);
+      playTone(1046.5, 0.45, 0.6, 0.525);
     } catch {
       // Audio not supported
     }
 
     // Save to history
+    const savedDetails = detailsRef.current;
     const newEntry: PaymentHistoryEntry = {
-      id: transactionId,
-      name: details.name,
-      phone: details.phone,
-      upiId: details.upiId,
-      amount: details.amount,
-      timestamp: now.toISOString(),
-      type: 'sent',
+      id: transactionIdRef.current,
+      name: savedDetails.name,
+      phone: savedDetails.phone,
+      upiId: savedDetails.upiId,
+      amount: savedDetails.amount,
+      timestamp: nowRef.current.toISOString(),
+      type: "sent",
     };
 
     try {
-      const existing = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]') as PaymentHistoryEntry[];
+      const existing = JSON.parse(
+        localStorage.getItem(HISTORY_KEY) || "[]",
+      ) as PaymentHistoryEntry[];
       const updated = [newEntry, ...existing];
       localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
     } catch {
@@ -160,18 +199,18 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-between"
-      style={{ background: 'oklch(0.08 0.010 250)' }}
+      style={{ background: "oklch(0.08 0.010 250)" }}
     >
       {/* Screenshot saved toast */}
       {screenshotToast && (
         <div
           className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full"
           style={{
-            background: 'oklch(0.25 0.025 250)',
-            color: 'oklch(0.97 0.005 250)',
-            fontSize: '13px',
-            fontWeight: '500',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+            background: "oklch(0.25 0.025 250)",
+            color: "oklch(0.97 0.005 250)",
+            fontSize: "13px",
+            fontWeight: "500",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
           }}
         >
           📸 Screenshot saved
@@ -186,21 +225,32 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
             {/* Pulse rings */}
             <div
               className="absolute inset-0 rounded-full animate-pulse-ring"
-              style={{ background: 'oklch(0.55 0.22 240 / 0.25)' }}
+              style={{ background: "oklch(0.55 0.22 240 / 0.25)" }}
             />
             <div
               className="absolute inset-0 rounded-full animate-pulse-ring"
-              style={{ background: 'oklch(0.55 0.22 240 / 0.15)', animationDelay: '0.3s' }}
+              style={{
+                background: "oklch(0.55 0.22 240 / 0.15)",
+                animationDelay: "0.3s",
+              }}
             />
             {/* Blue circle */}
             <div
               className="relative w-24 h-24 rounded-full flex items-center justify-center animate-success-scale"
               style={{
-                background: 'oklch(0.55 0.22 240)',
-                boxShadow: '0 8px 32px oklch(0.55 0.22 240 / 0.4)',
+                background: "oklch(0.55 0.22 240)",
+                boxShadow: "0 8px 32px oklch(0.55 0.22 240 / 0.4)",
               }}
             >
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 48 48"
+                fill="none"
+                role="img"
+                aria-label="Payment successful checkmark"
+              >
+                <title>Payment successful checkmark</title>
                 <path
                   d="M10 24L20 34L38 14"
                   stroke="white"
@@ -219,12 +269,12 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
           <p
             className="animate-fade-up"
             style={{
-              fontSize: '42px',
-              fontWeight: '300',
-              color: 'oklch(0.97 0.005 250)',
+              fontSize: "42px",
+              fontWeight: "300",
+              color: "oklch(0.97 0.005 250)",
               fontFamily: "'Google Sans', 'Roboto', sans-serif",
-              letterSpacing: '-1px',
-              animationDelay: '0.3s',
+              letterSpacing: "-1px",
+              animationDelay: "0.3s",
               opacity: 0,
             }}
           >
@@ -236,31 +286,31 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
         <div
           style={{
             opacity: showDetails ? 1 : 0,
-            transition: 'opacity 0.8s ease',
-            width: '100%',
+            transition: "opacity 0.8s ease",
+            width: "100%",
           }}
         >
           {/* Paid to section */}
           <div className="text-center mt-4 mb-1">
             <p
               style={{
-                fontSize: '14px',
-                color: 'oklch(0.55 0.02 250)',
-                fontWeight: '400',
+                fontSize: "14px",
+                color: "oklch(0.55 0.02 250)",
+                fontWeight: "400",
               }}
             >
               Paid to
             </p>
             <p
               style={{
-                fontSize: '22px',
-                fontWeight: '600',
-                color: 'oklch(0.97 0.005 250)',
+                fontSize: "22px",
+                fontWeight: "600",
+                color: "oklch(0.97 0.005 250)",
                 fontFamily: "'Google Sans', 'Roboto', sans-serif",
-                marginTop: '2px',
+                marginTop: "2px",
               }}
             >
-              {details.name || 'Recipient'}
+              {details.name || "Recipient"}
             </p>
           </div>
 
@@ -268,13 +318,13 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
           <div className="flex items-center justify-center gap-1.5 mt-2">
             <ShieldCheck
               size={16}
-              style={{ color: 'oklch(0.65 0.18 145)', flexShrink: 0 }}
+              style={{ color: "oklch(0.65 0.18 145)", flexShrink: 0 }}
             />
             <p
               style={{
-                fontSize: '13px',
-                color: 'oklch(0.75 0.01 250)',
-                fontWeight: '400',
+                fontSize: "13px",
+                color: "oklch(0.75 0.01 250)",
+                fontWeight: "400",
               }}
             >
               Banking name: {bankingName} SO SH ...
@@ -285,8 +335,8 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
           <div className="text-center mt-1">
             <p
               style={{
-                fontSize: '13px',
-                color: 'oklch(0.55 0.02 250)',
+                fontSize: "13px",
+                color: "oklch(0.55 0.02 250)",
               }}
             >
               {timestampStr}
@@ -300,18 +350,18 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
         className="w-full px-6 pb-10"
         style={{
           opacity: showDetails ? 1 : 0,
-          transition: 'opacity 0.8s ease',
+          transition: "opacity 0.8s ease",
         }}
       >
         {/* POWERED BY GPay */}
         <div className="flex flex-col items-center mb-6 gap-1">
           <span
             style={{
-              fontSize: '9px',
-              fontWeight: '600',
-              color: 'oklch(0.50 0.02 250)',
-              letterSpacing: '2px',
-              textTransform: 'uppercase',
+              fontSize: "9px",
+              fontWeight: "600",
+              color: "oklch(0.50 0.02 250)",
+              letterSpacing: "2px",
+              textTransform: "uppercase",
             }}
           >
             powered by
@@ -324,21 +374,22 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
           className="flex gap-3"
           style={{
             opacity: showScreenshotButtons ? 0 : 1,
-            transition: 'opacity 0.4s ease',
-            position: showScreenshotButtons ? 'absolute' : 'relative',
-            pointerEvents: showScreenshotButtons ? 'none' : 'auto',
+            transition: "opacity 0.4s ease",
+            position: showScreenshotButtons ? "absolute" : "relative",
+            pointerEvents: showScreenshotButtons ? "none" : "auto",
           }}
         >
           {/* Cancel X */}
           <button
+            type="button"
             onClick={onDone}
             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full transition-all active:scale-95"
             style={{
-              background: 'oklch(0.22 0.025 250)',
-              color: 'oklch(0.85 0.01 250)',
-              fontSize: '15px',
-              fontWeight: '500',
-              border: 'none',
+              background: "oklch(0.22 0.025 250)",
+              color: "oklch(0.85 0.01 250)",
+              fontSize: "15px",
+              fontWeight: "500",
+              border: "none",
             }}
           >
             Cancel ✕
@@ -346,14 +397,15 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
 
           {/* Continue */}
           <button
+            type="button"
             onClick={onDone}
             className="flex-1 py-4 rounded-full transition-all active:scale-95"
             style={{
-              background: '#1a73e8',
-              color: 'white',
-              fontSize: '15px',
-              fontWeight: '600',
-              border: 'none',
+              background: "#1a73e8",
+              color: "white",
+              fontSize: "15px",
+              fontWeight: "600",
+              border: "none",
             }}
           >
             Continue
@@ -365,22 +417,23 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
           className="flex gap-3"
           style={{
             opacity: showScreenshotButtons ? 1 : 0,
-            transition: 'opacity 0.4s ease',
-            position: showScreenshotButtons ? 'relative' : 'absolute',
-            pointerEvents: showScreenshotButtons ? 'auto' : 'none',
-            width: showScreenshotButtons ? 'auto' : '0',
+            transition: "opacity 0.4s ease",
+            position: showScreenshotButtons ? "relative" : "absolute",
+            pointerEvents: showScreenshotButtons ? "auto" : "none",
+            width: showScreenshotButtons ? "auto" : "0",
           }}
         >
           {/* Screenshot receipt - outlined */}
           <button
+            type="button"
             onClick={handleScreenshot}
             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full transition-all active:scale-95"
             style={{
-              border: '1.5px solid oklch(0.35 0.02 250)',
-              background: 'transparent',
-              color: 'oklch(0.97 0.005 250)',
-              fontSize: '14px',
-              fontWeight: '500',
+              border: "1.5px solid oklch(0.35 0.02 250)",
+              background: "transparent",
+              color: "oklch(0.97 0.005 250)",
+              fontSize: "14px",
+              fontWeight: "500",
             }}
           >
             <Camera size={16} />
@@ -389,14 +442,15 @@ export default function PaymentSuccessPage({ details, onDone }: PaymentSuccessPa
 
           {/* Continue - solid blue */}
           <button
+            type="button"
             onClick={onDone}
             className="flex-1 py-4 rounded-full transition-all active:scale-95"
             style={{
-              background: '#1a73e8',
-              color: 'white',
-              fontSize: '15px',
-              fontWeight: '600',
-              border: 'none',
+              background: "#1a73e8",
+              color: "white",
+              fontSize: "15px",
+              fontWeight: "600",
+              border: "none",
             }}
           >
             Continue
