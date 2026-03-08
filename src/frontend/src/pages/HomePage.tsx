@@ -116,13 +116,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     e.target.value = "";
   };
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 17) return "Good Afternoon";
-    return "Good Evening";
-  };
-
   const actionRows = [
     {
       id: "balance",
@@ -166,51 +159,9 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             "linear-gradient(180deg, oklch(0.14 0.025 175) 0%, oklch(0.10 0.015 250) 100%)",
         }}
       >
-        {/* Top row: profile + greeting + bells */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleProfilePicClick}
-              className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden transition-transform active:scale-95"
-              style={{
-                border: "2px solid oklch(0.55 0.22 240 / 0.5)",
-                background: profilePic
-                  ? "transparent"
-                  : "oklch(0.55 0.22 240 / 0.15)",
-              }}
-              title="Tap to change profile picture"
-            >
-              {profilePic ? (
-                <img
-                  src={profilePic}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <User size={20} style={{ color: "oklch(0.65 0.22 240)" }} />
-              )}
-            </button>
-            <div>
-              <p className="text-xs" style={{ color: "oklch(0.60 0.02 250)" }}>
-                {getGreeting()}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="w-9 h-9 rounded-full flex items-center justify-center"
-              style={{ background: "oklch(0.18 0.022 250)" }}
-            >
-              <Bell size={18} style={{ color: "oklch(0.70 0.02 250)" }} />
-            </button>
-          </div>
-        </div>
-
-        {/* Search Bar */}
+        {/* Search Bar with profile pic on the right — GPay style */}
         <div
-          className="flex items-center gap-3 px-4 py-3 rounded-full mb-4"
+          className="flex items-center gap-3 px-4 py-2.5 rounded-full mb-4"
           style={{
             background: "oklch(0.16 0.020 250)",
             border: "1px solid oklch(0.25 0.025 250)",
@@ -219,7 +170,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <Search size={18} style={{ color: "oklch(0.55 0.02 250)" }} />
           <input
             type="text"
-            placeholder="Search phone number or UPI ID"
+            placeholder="Pay anyone on UPI"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -236,15 +187,39 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               <ArrowRight size={16} style={{ color: "white" }} />
             </button>
           ) : (
+            /* Profile picture circle — GPay style, right side of search bar */
             <button
               type="button"
-              onClick={() => onNavigate("scan")}
-              className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: "oklch(0.55 0.22 240 / 0.15)" }}
+              onClick={handleProfilePicClick}
+              className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 transition-transform active:scale-95"
+              style={{
+                border: "2px solid oklch(0.40 0.10 240 / 0.6)",
+                background: profilePic ? "transparent" : "oklch(0.30 0.05 240)",
+              }}
+              title="Tap to change profile picture"
             >
-              <QrCode size={16} style={{ color: "oklch(0.65 0.22 240)" }} />
+              {profilePic ? (
+                <img
+                  src={profilePic}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User size={18} style={{ color: "oklch(0.75 0.10 240)" }} />
+              )}
             </button>
           )}
+        </div>
+
+        {/* Notification bell row */}
+        <div className="flex items-center justify-end mb-1">
+          <button
+            type="button"
+            className="w-9 h-9 rounded-full flex items-center justify-center"
+            style={{ background: "oklch(0.18 0.022 250)" }}
+          >
+            <Bell size={18} style={{ color: "oklch(0.70 0.02 250)" }} />
+          </button>
         </div>
 
         {/* GPay Logo */}

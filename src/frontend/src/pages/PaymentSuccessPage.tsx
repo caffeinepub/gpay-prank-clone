@@ -145,10 +145,10 @@ export default function PaymentSuccessPage({
         osc.stop(ctx.currentTime + start + duration + 0.1);
       };
 
-      playTone(523.25, 0, 0.3, 0.6);
-      playTone(659.25, 0.15, 0.3, 0.6);
-      playTone(783.99, 0.3, 0.4, 0.6);
-      playTone(1046.5, 0.45, 0.6, 0.525);
+      playTone(523.25, 0, 0.3, 0.78);
+      playTone(659.25, 0.15, 0.3, 0.78);
+      playTone(783.99, 0.3, 0.4, 0.78);
+      playTone(1046.5, 0.45, 0.6, 0.6825);
     } catch {
       // Audio not supported
     }
@@ -225,12 +225,12 @@ export default function PaymentSuccessPage({
             {/* Pulse rings */}
             <div
               className="absolute inset-0 rounded-full animate-pulse-ring"
-              style={{ background: "oklch(0.55 0.22 240 / 0.25)" }}
+              style={{ background: "rgba(26, 115, 232, 0.25)" }}
             />
             <div
               className="absolute inset-0 rounded-full animate-pulse-ring"
               style={{
-                background: "oklch(0.55 0.22 240 / 0.15)",
+                background: "rgba(26, 115, 232, 0.15)",
                 animationDelay: "0.3s",
               }}
             />
@@ -238,8 +238,8 @@ export default function PaymentSuccessPage({
             <div
               className="relative w-24 h-24 rounded-full flex items-center justify-center animate-success-scale"
               style={{
-                background: "oklch(0.55 0.22 240)",
-                boxShadow: "0 8px 32px oklch(0.55 0.22 240 / 0.4)",
+                background: "#1a73e8",
+                boxShadow: "0 8px 32px rgba(26, 115, 232, 0.5)",
               }}
             >
               <svg

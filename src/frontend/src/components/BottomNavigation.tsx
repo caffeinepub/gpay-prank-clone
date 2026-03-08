@@ -1,6 +1,8 @@
 import { Home, User } from "lucide-react";
 import React from "react";
 
+const PROFILE_PIC_KEY = "gpay_profile_picture";
+
 interface BottomNavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
@@ -42,6 +44,27 @@ export default function BottomNavigation({
   activeTab,
   onTabChange,
 }: BottomNavigationProps) {
+  const [profilePic, setProfilePic] = React.useState<string | null>(() => {
+    return localStorage.getItem(PROFILE_PIC_KEY);
+  });
+
+  // Listen for profile pic changes (when user uploads a new photo)
+  React.useEffect(() => {
+    const handleStorage = () => {
+      setProfilePic(localStorage.getItem(PROFILE_PIC_KEY));
+    };
+    window.addEventListener("storage", handleStorage);
+    // Also poll every 2s to catch same-tab updates
+    const interval = setInterval(() => {
+      const current = localStorage.getItem(PROFILE_PIC_KEY);
+      setProfilePic((prev) => (prev !== current ? current : prev));
+    }, 2000);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <nav
       className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-40"
@@ -99,17 +122,39 @@ export default function BottomNavigation({
                     }
                   />
                 )}
-                {icon === "user" && (
-                  <User
-                    size={22}
-                    style={{
-                      color: isActive
-                        ? "oklch(0.97 0.005 250)"
-                        : "oklch(0.60 0.02 250)",
-                      strokeWidth: isActive ? 2.5 : 1.8,
-                    }}
-                  />
-                )}
+                {icon === "user" &&
+                  (profilePic ? (
+                    <div
+                      className="overflow-hidden rounded-full"
+                      style={{
+                        width: 24,
+                        height: 24,
+                        border: isActive
+                          ? "2px solid #1a73e8"
+                          : "2px solid oklch(0.40 0.05 250)",
+                      }}
+                    >
+                      <img
+                        src={profilePic}
+                        alt="Profile"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <User
+                      size={22}
+                      style={{
+                        color: isActive
+                          ? "oklch(0.97 0.005 250)"
+                          : "oklch(0.60 0.02 250)",
+                        strokeWidth: isActive ? 2.5 : 1.8,
+                      }}
+                    />
+                  ))}
               </div>
               <span
                 className="text-xs"
